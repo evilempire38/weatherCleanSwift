@@ -19,11 +19,11 @@ protocol CitiesBusinessLogic {
 protocol CitiesWorkerLogic {}
 
 protocol CitiesPresentationLogic {
-    func presentInitForm(_ response: Cities.InitForm.Response)
+    func presentInitForm(_ response: [Cities.InitForm.Response])
 }
 
 protocol CitiesDisplayLogic: AnyObject {
-    func displayInitForm(_ viewModel: Cities.InitForm.ViewModel)
+    func displayInitForm(_ viewModel: [Cities.InitForm.ViewModel])
 }
 
 protocol CitiesRoutingLogic {}
