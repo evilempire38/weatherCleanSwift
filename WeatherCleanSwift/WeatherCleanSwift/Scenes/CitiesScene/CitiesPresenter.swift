@@ -9,7 +9,6 @@
 final class CitiesPresenter: CitiesPresentationLogic {
     weak var viewController: CitiesDisplayLogic?
 
-    func presentInitForm(_ response: Cities.InitForm.Response) {
-        viewController?.displayInitForm(Cities.InitForm.ViewModel())
+    func presentInitForm(_ response: [Cities.InitForm.Response]) {
     }
 }

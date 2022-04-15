@@ -18,6 +18,7 @@
 		9A0766DC280758DD008E9261 /* CitiesProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0766D4280758DD008E9261 /* CitiesProtocols.swift */; };
 		9A0766DD280758DD008E9261 /* CitiesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0766D5280758DD008E9261 /* CitiesAssembly.swift */; };
 		9A0766DE280758DD008E9261 /* CitiesInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0766D6280758DD008E9261 /* CitiesInteractor.swift */; };
+		9A240A5C280801C4001DE2DF /* CitiesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A240A5B280801C4001DE2DF /* CitiesCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		9A0766D4280758DD008E9261 /* CitiesProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesProtocols.swift; sourceTree = "<group>"; };
 		9A0766D5280758DD008E9261 /* CitiesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesAssembly.swift; sourceTree = "<group>"; };
 		9A0766D6280758DD008E9261 /* CitiesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesInteractor.swift; sourceTree = "<group>"; };
+		9A240A5B280801C4001DE2DF /* CitiesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,14 @@
 		9A0766CE280758CF008E9261 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				9A240A592808019F001DE2DF /* CitiesScene */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		9A240A592808019F001DE2DF /* CitiesScene */ = {
+			isa = PBXGroup;
+			children = (
 				9A0766CF280758DD008E9261 /* CitiesPresenter.swift */,
 				9A0766D0280758DD008E9261 /* CitiesWorker.swift */,
 				9A0766D1280758DD008E9261 /* CitiesRouter.swift */,
@@ -86,8 +96,17 @@
 				9A0766D4280758DD008E9261 /* CitiesProtocols.swift */,
 				9A0766D5280758DD008E9261 /* CitiesAssembly.swift */,
 				9A0766D6280758DD008E9261 /* CitiesInteractor.swift */,
+				9A240A5A280801A9001DE2DF /* View */,
 			);
-			path = Scenes;
+			path = CitiesScene;
+			sourceTree = "<group>";
+		};
+		9A240A5A280801A9001DE2DF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9A240A5B280801C4001DE2DF /* CitiesCollectionViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -100,6 +119,7 @@
 				9A0766B328075354008E9261 /* Sources */,
 				9A0766B428075354008E9261 /* Frameworks */,
 				9A0766B528075354008E9261 /* Resources */,
+				9AB725EB28094FC3004F6410 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -154,6 +174,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		9AB725EB28094FC3004F6410 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		9A0766B328075354008E9261 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -169,6 +210,7 @@
 				9A0766DB280758DD008E9261 /* CitiesViewController.swift in Sources */,
 				9A0766DC280758DD008E9261 /* CitiesProtocols.swift in Sources */,
 				9A0766BD28075354008E9261 /* SceneDelegate.swift in Sources */,
+				9A240A5C280801C4001DE2DF /* CitiesCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

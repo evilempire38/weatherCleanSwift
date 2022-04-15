@@ -20,8 +20,5 @@ final class CitiesInteractor: CitiesBusinessLogic, CitiesDataStore {
     }
 
     func requestInitForm(_ request: Cities.InitForm.Request) {
-        DispatchQueue.main.async {
-            self.presenter.presentInitForm(Cities.InitForm.Response())
-        }
     }
 }
