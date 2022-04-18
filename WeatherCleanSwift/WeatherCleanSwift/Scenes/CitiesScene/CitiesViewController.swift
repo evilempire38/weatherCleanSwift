@@ -10,14 +10,9 @@ import UIKit
 
 final class CitiesViewController: UIViewController, CitiesDisplayLogic,
                                   UISearchBarDelegate, UISearchControllerDelegate,
-                                  UISearchResultsUpdating {
+                                  UISearchResultsUpdating, UITextViewDelegate {
     private let interactor: CitiesBusinessLogic
     private let router: CitiesRoutingLogic
-    private let rightBarButton: UIBarButtonItem = {
-        let button = UIButton(type: .custom)
-        button.setBackgroundImage(UIImage(named: "points"), for: .normal)
-        return UIBarButtonItem(customView: button)
-    }()
     let collection: UICollectionView = {
         let collectionLayout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
@@ -25,26 +20,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
     }()
     let searchBar = UISearchBar()
     let weatherLabel = UILabel()
-private var weatherDataModel: [Cities.InitForm.ViewModel] = [
-    Cities.InitForm.ViewModel(
-        location: "My Location",
-        description: "Party Cloudy",
-        time: "Seongnam-si",
-        lowTemperature: "L: 15˚",
-        highTemperature: "H: 29˚",
-        temperature: "21˚",
-        index: 0
-    ),
-    Cities.InitForm.ViewModel(
-        location: "Seoul",
-        description: "Not as warm tomorrow",
-        time: "9:11 PM",
-        lowTemperature: "L: 15˚",
-        highTemperature: "H: 29˚",
-        temperature: "22˚",
-        index: 1
-    )
-]
+    private var weatherDataModel: [Cities.InitForm.ViewModel] = []
     init(
         interactor: CitiesBusinessLogic,
         router: CitiesRoutingLogic
@@ -62,11 +38,15 @@ private var weatherDataModel: [Cities.InitForm.ViewModel] = [
     override func viewDidLoad() {
         super.viewDidLoad()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        tapGesture.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGesture)
+         let rightBarButton: UIBarButtonItem = {
+            let button = UIButton(type: .custom)
+            button.addTarget(self, action: #selector(callAlertController), for: .allTouchEvents)
+            button.setBackgroundImage(UIImage(named: "points"), for: .normal)
+            return UIBarButtonItem(customView: button)
+        }()
         self.navigationItem.rightBarButtonItem = rightBarButton
         createUI()
-        initForm()
     }
     @objc private func hideKeyboard() {
         self.view.endEditing(true)
@@ -74,13 +54,14 @@ private var weatherDataModel: [Cities.InitForm.ViewModel] = [
 
     // MARK: - CitiesDisplayLogic
 
-    func displayInitForm(_ viewModel: [Cities.InitForm.ViewModel]) {
+    func displayInitForm(_ viewModel: Cities.InitForm.ViewModel) {
+        weatherDataModel.append(viewModel)
+        collection.reloadData()
     }
 
     // MARK: - Private
 
     private func initForm() {
-        interactor.requestInitForm(Cities.InitForm.Request())
     }
 
     // MARK: - Creating Interface
@@ -132,6 +113,23 @@ private var weatherDataModel: [Cities.InitForm.ViewModel] = [
         searchBar.widthAnchor.constraint(equalToConstant: 320).isActive = true
         searchBar.heightAnchor.constraint(equalToConstant: 40).isActive = true
         searchBar.topAnchor.constraint(equalTo: weatherLabel.bottomAnchor, constant: 8).isActive = true
+    }
+
+    @objc private func callAlertController() {
+        let alertController = UIAlertController(title: "Add city", message: nil, preferredStyle: .alert)
+        alertController.addTextField { myTextField in
+            myTextField.placeholder = "Add city"
+        }
+        let findAction = UIAlertAction(title: "Find", style: .default) { [weak alertController] _ in
+            guard let textFields = alertController?.textFields else { return }
+            if let cityText = textFields[0].text {
+                self.interactor.requestWeather(Cities.InitForm.Request(city: cityText))
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        alertController.addAction(findAction)
+        present(alertController, animated: true)
     }
 }
 extension CitiesViewController: UICollectionViewDataSource,

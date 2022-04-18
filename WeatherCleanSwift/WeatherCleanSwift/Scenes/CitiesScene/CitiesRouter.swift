@@ -18,9 +18,4 @@ final class CitiesRouter: CitiesRoutingLogic, CitiesDataPassing {
 }
 
 private extension CitiesRouter {
-//    func passDataTo_() {
-//        source: CitiesDataStore,
-//        destination: inout SomewhereDataStore
-//    ) {
-//    }
 }
