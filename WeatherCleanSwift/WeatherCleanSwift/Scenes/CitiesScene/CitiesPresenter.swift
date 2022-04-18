@@ -9,15 +9,18 @@
 import Foundation
 
 final class CitiesPresenter: CitiesPresentationLogic {
+    func presentAbsentAlertController() {
+        viewController?.displayAbsentAlertController()
+    }
     weak var viewController: CitiesDisplayLogic?
 
-    func presentInitForm(_ response: Cities.WeatherModel) {
+    func presentCityWeather(_ response: Cities.WeatherModel) {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "MMM d, yyyy"
         let dateString = Date(timeIntervalSince1970: TimeInterval(response.date))
         let date = dateFormatter.string(from: dateString)
-        viewController?.displayInitForm(
+        viewController?.displayCityWeather(
             Cities.InitForm.ViewModel(
                 location: response.name,
                 description: response.weather?[0].weatherDescription ?? "",
