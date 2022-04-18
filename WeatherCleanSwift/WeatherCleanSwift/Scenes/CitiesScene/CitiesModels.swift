@@ -10,8 +10,12 @@ import UIKit
 
 enum Cities {
     enum InitForm {
-        struct Request {}
-        struct Response {}
+        struct Request {
+            let city: String
+        }
+        struct Response: Decodable {
+            let weatherModel: WeatherModel
+        }
         struct ViewModel {
             let location: String
             let time: String
@@ -49,5 +53,62 @@ enum Cities {
                 }
             }
         }
+    }
+    struct WeatherModel: Decodable {
+        let coord: Coord?
+        let weather: [Weather]?
+        let main: Main
+        let visibility: Int
+        let wind: Wind
+        let clouds: Clouds
+        let date: Int
+        let timezone, id: Int
+        let name: String
+        let cod: Int
+        enum CodingKeys: String, CodingKey {
+            case coord
+            case weather
+            case main
+            case visibility
+            case wind
+            case clouds
+            case date = "dt"
+            case timezone
+            case id
+            case name
+            case cod
+        }
+    }
+    struct Clouds: Decodable {
+        let all: Int
+    }
+    struct Coord: Decodable {
+        let lon: Double?
+        let lat: Double?
+    }
+    struct Main: Decodable {
+        let temp, feelsLike, tempMin, tempMax: Double
+        let pressure, humidity: Int
+        enum CodingKeys: String, CodingKey {
+            case temp
+            case feelsLike = "feels_like"
+            case tempMin = "temp_min"
+            case tempMax = "temp_max"
+            case pressure, humidity
+        }
+    }
+    struct Weather: Decodable {
+        let id: Int?
+        let main, weatherDescription, icon: String
+        enum CodingKeys: String, CodingKey {
+            case id, main
+            case weatherDescription = "description"
+            case icon
+        }
+    }
+
+    struct Wind: Decodable {
+        let speed: Double
+        let deg: Int
     }
 }

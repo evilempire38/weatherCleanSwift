@@ -107,17 +107,11 @@ class CitiesCollectionViewCell: UICollectionViewCell {
             equalTo: backgroundImageView.leadingAnchor,
             constant: 20
         ).isActive = true
-        locationLabel.topAnchor.constraint(
-            equalTo: backgroundImageView.topAnchor,
-            constant: 8
-        ).isActive = true
+        locationLabel.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 8).isActive = true
         locationLabel.heightAnchor.constraint(
             equalToConstant: 30
         ).isActive = true
-        timeLabel.leadingAnchor.constraint(
-            equalTo: backgroundImageView.leadingAnchor,
-            constant: 20
-        ).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor, constant: 20).isActive = true
         timeLabel.topAnchor.constraint(
             equalTo: locationLabel.bottomAnchor,
             constant: 4
@@ -126,16 +120,14 @@ class CitiesCollectionViewCell: UICollectionViewCell {
             equalTo: backgroundImageView.leadingAnchor,
             constant: 20
         ).isActive = true
-        descriptionLabel.topAnchor.constraint(
-            equalTo: timeLabel.bottomAnchor,
-            constant: 10
-        ).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10).isActive = true
         descriptionLabel.widthAnchor.constraint(
             equalToConstant: 195
         ).isActive = true
         temperatureLabel.topAnchor.constraint(
             equalTo: backgroundImageView.topAnchor,
-            constant: 8).isActive = true
+            constant: 8
+        ).isActive = true
         temperatureLabel.trailingAnchor.constraint(
             equalTo: backgroundImageView.trailingAnchor,
             constant: 5
