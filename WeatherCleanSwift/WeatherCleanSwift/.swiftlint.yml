@@ -1,0 +1,253 @@
+identifier_name:
+  min_length:
+    warning: 3
+  max_length:
+    warning: 40
+  excluded:
+    - id
+
+cyclomatic_complexity:
+  ignores_case_statements: true
+
+disabled_rules:
+  - inclusive_language
+  - legacy_hashing
+  - function_parameter_count
+  - redundant_string_enum_value
+  - closure_parameter_position
+  - discarded_notification_center_observer
+  - explicit_acl
+  - explicit_enum_raw_value
+  - type_body_length
+opt_in_rules:
+  - anyobject_protocol
+  - array_init
+  - closure_body_length
+  - closure_end_indentation
+  - closure_spacing
+  - collection_alignment
+  - deployment_target
+  - discouraged_object_literal
+  - empty_count
+  - empty_collection_literal
+  - empty_xctest_method
+  - explicit_init
+  - fallthrough
+  - fatal_error_message
+  - file_name_no_space
+  - first_where
+  - function_body_length
+  - function_default_parameter_at_end
+  - identical_operands
+  - joined_default_parameter
+  - last_where
+  - legacy_multiple
+  - legacy_random
+  - literal_expression_end_indentation
+  - multiline_arguments
+  - multiline_arguments_brackets
+  - multiline_parameters
+  - multiline_parameters_brackets
+  - operator_usage_whitespace
+  - prefer_self_type_over_type_of_self
+  - single_test_class
+  - sorted_first_last
+  - unused_import
+  - vertical_whitespace_closing_braces
+  - vertical_whitespace_opening_braces
+  - yoda_condition
+
+line_length: 120
+
+force_cast: warning
+force_try: warning
+
+file_length:
+  warning: 500
+  error: 1500
+
+closure_body_length:
+  warning: 70
+
+function_body_length:
+  warning: 70
+
+type_name:
+  min_length: 3
+  max_length:
+    warning: 40
+    error: 50
+
+deployment_target:
+  iOS_deployment_target: 12.0
+  watchOS_deployment_target: 6.0
+
+nesting:
+  type_level:
+    warning: 2
+
+warning_threshold: 1
+
+excluded:
+  # Библиотеки
+  - Pods
+  - lib
+  - LocalPods
+  - DerivedData
+  - derivedData
+  - Artifacts
+  - SourcePackages
+
+  # Package.swift и Package.resolved
+  - VTBODependencies/Package.swift
+  - vtb24.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+  # Код проекта на карантине
+  - src/screens/CarLoanDeal/Common
+  - src/screens/CarLoanDeal/Common/Cells
+  - src/screens/CarLoanDeal/Common/Resources
+  - src/screens/CarLoanDeal/Common/Models
+  - src/screens/CarLoanDeal/Common/Controls
+  - src/screens/CarLoanDeal/Common/Headers
+  - src/screens/CarLoanDeal/Common/Shades
+  - src/screens/CarLoanDeal/Common/Shades/SuccessScene
+  - src/screens/CarLoanDeal/Common/Shades/CreditRateInfo
+  - src/screens/CarLoanDeal/Common/Shades/CLSDMarkModelVehicleSearch
+  - src/screens/CarLoanDeal/Common/Shades/CLDProcessingTimeShade
+  - src/screens/CarLoanDeal/Common/Shades/CLDStatusScene
+  - src/screens/CarLoanDeal/Common/Shades/CLDCarInsuranceShade
+  - src/screens/CarLoanDeal/Common/Shades/CLDLifeInsuranceShade
+  - src/screens/CarLoanDeal/Common/Shades/CLDRateShade
+  - src/screens/CarLoanDeal/Common/Shades/CLDPrepareDocumentsShade
+  - src/screens/CarLoanDeal/Common/Helpers
+  - src/screens/CarLoanDeal/CLDPreloader
+  - src/screens/CarLoanDeal/CLDConfirmWithSms
+  - src/screens/CarLoanDeal/BuisnessLogic
+  - src/screens/CarLoanDeal/BuisnessLogic/CLDStatusManager
+  - src/screens/CarLoanDeal/CLSDDocumentsUpload
+  - src/screens/CarLoanDeal/CLSDVehicleParameters
+  - src/screens/CarLoanDeal/CLSDSummaryParameters
+  - src/screens/CarLoanDeal/CLSDDealerDetails
+  - src/screens/CardLock/SceneCardLockConfirmation
+  - src/screens/CardLock/SceneCardLockConfirmation/Network
+  - src/screens/CardLock/SceneCardLockConfirmation/View
+  - src/screens/Insuranse/Home/Options
+  - src/screens/Insuranse/InsuranceProlongationHelp
+  - src/screens/Insuranse/InsuranceProlongationHelp/Views
+  - src/screens/Insuranse/InsuranceDetails
+  - src/screens/Insuranse/InsuranceDetails/BlockViews
+  - src/screens/Insuranse/InsuranceDetails/Popup
+  - src/screens/Insuranse/InsuranceDetails/InsuranceActionBar
+  - src/screens/Insuranse/InsuranceDetails/Analytics
+  - src/screens/Insuranse/InsuranceProlongation
+  - src/screens/Insuranse/InsuranceProlongation/Views
+  - src/screens/Insuranse/Osago/InputDriverData
+  - src/screens/Insuranse/Osago/InputDriverData/AdditionalDriverView
+  - src/screens/Insuranse/Osago/InputDriverData/View/AddNewDriverView
+  - src/screens/Insuranse/Osago/OsagoEstimations
+  - src/screens/Insuranse/Osago/OsagoEstimations/OsagoEstimationCompanyView
+  - src/screens/Insuranse/Osago/OsagoEstimations/OsagoDescriptionView
+  - src/screens/Insuranse/Osago/InputRegistrationNumber/View
+  - src/screens/Insuranse/Osago/InputRegistrationNumber/View/InputDiagnosticCardNumberView
+  - src/screens/Insuranse/HealthCheck
+  - src/screens/Insuranse/InsuranceExtended
+  - src/screens/Insuranse/InsuranceExtended/InsuranceExtendedCofirmSuccessView
+  - src/screens/Insuranse/InsuranceExtended/InsuranceExtendedCompanyListView
+  - src/screens/Insuranse/InsuranceExtended/InsuranceExtendedView
+  - src/screens/Insuranse/PromoShimmerView
+  - src/screens/Insuranse/Common/Popup
+  - src/screens/Insuranse/Model
+  - src/screens/Insuranse/Model/Content
+  - src/screens/Insuranse/Model/Address
+  - src/screens/Insuranse/Model/Application
+  - src/screens/Insuranse/Workers/Catalogue
+  - src/screens/Insuranse/InsuranceProlongationHelpUpdated
+  - src/screens/Insuranse/InsuranceProlongationHelpUpdated/View
+  - src/screens/Insuranse/Child/ChildName
+  - src/screens/Insuranse/Child/ChildName/View
+  - src/screens/OpportunityCard/OCList/View
+  - src/screens/OpportunityCard/OCList/View/CardPanel
+  - src/screens/OpportunityCard/OCList/View/Cell
+  - src/screens/OpportunityCard/OCList/Workers
+  - src/screens/OpportunityCard/OCCashScreen
+  - src/screens/OpportunityCard/OCCashScreen/Views
+  - src/screens/OpportunityCard/OCStartToUseScreen
+  - src/screens/OpportunityCard/OCIssueErrorDeclined
+  - src/screens/OpportunityCard/OCLimit
+  - src/screens/OpportunityCard/OCLimit/Models
+  - src/screens/OpportunityCard/OCLimit/Views
+  - src/screens/OpportunityCard/OCInsuranceOffer
+  - src/screens/OpportunityCard/OCListDocuments
+  - src/screens/OpportunityCard/OCListDocuments/View
+  - src/screens/OpportunityCard/OCSuccessfullyIssuedCard
+  - src/screens/OpportunityCard/OCSuccessfullyIssuedCard/View/CardView
+  - src/screens/OpportunityCard/Common
+  - src/screens/OpportunityCard/OCOperations
+  - src/screens/OpportunityCard/OCNeedLimitScreen
+  - src/screens/OpportunityCard/OCPlasticScreen
+  - src/screens/OpportunityCard/OCDocumentDetails
+  - src/screens/OpportunityCard/OCGeneralError
+  - src/screens/OpportunityCard/OCTimeoutScreen
+  - src/screens/OpportunityCard/OCWaitingView
+  - src/screens/OpportunityCard/OCWaitingView/View
+  - src/screens/OpportunityCard/OCAnketaInput
+  - src/screens/OpportunityCard/OCAnketaInput/Views
+  - src/screens/OpportunityCard/OCAnalytics
+  - src/screens/OpportunityCard/OCConfirm
+  - src/screens/OpportunityCard/OCConfirm/Views
+  - src/screens/OpportunityCard/OCChoiceScreen
+  - src/screens/ProductsTabViewController/ProductReqisitesViewController
+  - src/screens/ProductsTabViewController/ProductReqisitesViewController/cells
+  - src/screens/ProductsTabViewController/ProductReqisitesViewController/headers
+  - src/screens/ProductsTabViewController/ProductReqisitesViewController/Facelift
+  - src/screens/ProductsTabViewController/ProductReqisitesViewController/Facelift/cells
+  - src/screens/ProductsTabViewController/cells
+  - src/screens/ProductsTabViewController/ProductActionsViewController/Replenisment Actions View
+  - src/screens/ProductsTabViewController/ProductActionsViewController/Replenisment Actions View/FaceLift
+  - src/screens/ProductsTabViewController/ProductAttributesViewController/Facelift
+  - src/screens/CrossSearchShowAllPayments
+  - src/screens/WebLoginWithQR
+  - src/screens/WebLoginWithQR/Status
+  - src/screens/WebLoginWithQR/Confirmation
+  - src/screens/WebLoginWithQR/Confirmation/Workers
+  - src/screens/DebugMenu
+  - src/screens/DebugMenu/FaceLift/FLDebugMenuScreen
+  - src/screens/DebugMenu/FaceLift/FLDebugMenuScreen/Views
+  - src/screens/DebugMenu/FaceLift/FLCustomServerScreen
+  - src/screens/ParkingScreens/LiveBalanceMosParkingMC
+  - src/screens/ParkingScreens/ParkingPayment
+  - src/screens/ParkingScreens/ParkingPayment/Views
+  - src/screens/ParkingScreens/AddParkingAccount
+  - src/screens/ParkingScreens/AddParkingAccount/Helper
+  - src/screens/ParkingScreens/ParkingSpecial
+  - src/screens/VTBMobile
+  - src/screens/VTBMobile/Components
+  - src/screens/CertificateListScreen/Face Lift
+  - src/screens/CertificateListScreen/Face Lift/StatusScreen
+  - src/screens/CertificateListScreen/Face Lift/Info Popup
+  - src/screens/CertificateListScreen/Face Lift/Utils
+  - src/screens/CertificateListScreen/Face Lift/StepController
+  - src/screens/CertificateListScreen/Face Lift/Analitics
+  - src/screens/CertificateListScreen/Face Lift/Views
+  - src/screens/CertificateListScreen/Face Lift/Views/Shimmers
+  - src/screens/CrossSearchVoiceSearch
+  - src/screens/FLPreloginScreens/Helpers/Extensions
+  - src/screens/IZP
+  - src/screens/IZP/IZPScreenModule
+  - src/screens/IZP/IZPScreenModule/FaceLift
+  - src/screens/CalendarMonthModule
+  - src/screens/FLProductDetailsHistory
+  - src/screens/BarcodeTutorial/Facelift
+  - src/screens/BarcodeTutorial/Facelift/Views
+  - src/screens/FirstLoginMaster
+  - src/screens/VoiceAssistant/Agreement
+  - src/screens/ChatViewController/RatingAndReview
+  - src/screens/ChatViewController/ActiveElements
+  - src/screens/ChatViewController/Voice
+  - src/screens/ChatViewController/ChatDataModel
+  - src/screens/InvoiceSubscriptionsScreen
+  - src/screens/InvoiceSubscriptionsScreen/Models
+  - src/screens/InvoiceSubscriptionsScreen/Workers
+  - src/screens/InvoiceSubscriptionsScreen/Views
+  - src/screens/InvoiceSubscriptionsScreen/Views/Cells
+  - src/screens/CashWithQR
