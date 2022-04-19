@@ -23,8 +23,10 @@ final class CitiesInteractor: CitiesBusinessLogic, CitiesDataStore {
         worker.getBaseWeather(request) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
-                case.success(let success): self?.presenter.presentCityWeather(success)
-                case.failure(_): self?.presenter.presentAbsentAlertController()
+                case.success(let success):
+                    self?.presenter.presentCityWeather(Cities.InitForm.Response(weatherModel: success))
+                case.failure(_):
+                    self?.presenter.presentAbsentAlertController()
                 }
             }
         }
