@@ -9,8 +9,7 @@
 import UIKit
 
 final class CitiesViewController: UIViewController, CitiesDisplayLogic,
-                                  UISearchBarDelegate, UISearchControllerDelegate,
-                                  UISearchResultsUpdating, UITextViewDelegate {
+                                  UISearchBarDelegate {
     private let interactor: CitiesBusinessLogic
     private let router: CitiesRoutingLogic
     let collection: UICollectionView = {
@@ -21,6 +20,8 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
     let searchBar = UISearchBar()
     let weatherLabel = UILabel()
     private var weatherDataModel: [Cities.InitForm.ViewModel] = []
+    private var filteredDataModel: [Cities.InitForm.ViewModel] = []
+    private var isSearchingInSearchBar: Bool = false
     init(
         interactor: CitiesBusinessLogic,
         router: CitiesRoutingLogic
@@ -47,6 +48,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
         }()
         self.navigationItem.rightBarButtonItem = rightBarButton
         createUI()
+        initForm()
     }
     @objc private func hideKeyboard() {
         self.view.endEditing(true)
@@ -54,14 +56,23 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
 
     // MARK: - CitiesDisplayLogic
 
-    func displayInitForm(_ viewModel: Cities.InitForm.ViewModel) {
+    func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel) {
         weatherDataModel.append(viewModel)
         collection.reloadData()
+    }
+    func displayAbsentAlertController () {
+        let absentAC = UIAlertController(title: "Oops!", message: "No such city", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        absentAC.addAction(okAction)
+        present(absentAC, animated: true, completion: nil)
     }
 
     // MARK: - Private
 
     private func initForm() {
+        if weatherDataModel.isEmpty {
+            callAlertController()
+        }
     }
 
     // MARK: - Creating Interface
@@ -70,6 +81,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
         setupSearchController()
         setupWeatherCollection()
     }
+
     private func setupWeatherCollection() {
         self.view.addSubview(collection)
         collection.delegate = self
@@ -105,6 +117,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
     private func setupSearchController() {
         self.view.addSubview(searchBar)
         searchBar.placeholder = "Search for a city or airport"
+        searchBar.delegate = self
         searchBar.barTintColor = .black
         searchBar.searchTextField.textColor = .lightGray
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -136,18 +149,20 @@ extension CitiesViewController: UICollectionViewDataSource,
                                 UICollectionViewDelegate,
                                 UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weatherDataModel.count
+        if isSearchingInSearchBar {
+            return filteredDataModel.count
+        } else {
+            return weatherDataModel.count
+        }
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "citiesCell",
-            for: indexPath
-        ) as? CitiesCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(object: weatherDataModel[indexPath.row])
+func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+guard let cell = collectionView.dequeueReusableCell(
+    withReuseIdentifier: "citiesCell",
+    for: indexPath
+) as? CitiesCollectionViewCell else { return UICollectionViewCell() }
+        let object = isSearchingInSearchBar ? filteredDataModel[indexPath.row] : weatherDataModel[indexPath.row]
+        cell.configure(object: object)
         return cell
     }
     func collectionView(
@@ -157,7 +172,16 @@ extension CitiesViewController: UICollectionViewDataSource,
     ) -> CGSize {
             return CGSize(width: collectionView.frame.width - 20, height: 120)
         }
-    func updateSearchResults(for searchController: UISearchController) {
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            filteredDataModel.removeAll()
+            isSearchingInSearchBar = false
+        } else {
+            isSearchingInSearchBar = true
+            filteredDataModel = weatherDataModel.filter { $0.location.hasPrefix(searchText) }
+        }
+        collection.reloadData()
     }
 }
 private enum Constants {

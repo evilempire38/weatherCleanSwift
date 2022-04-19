@@ -25,11 +25,13 @@ protocol CitiesWorkerLogic {
 }
 
 protocol CitiesPresentationLogic {
-    func presentInitForm(_ response: Cities.WeatherModel)
+    func presentCityWeather(_ response: Cities.WeatherModel)
+    func presentAbsentAlertController ()
 }
 
 protocol CitiesDisplayLogic: AnyObject {
-    func displayInitForm(_ viewModel: Cities.InitForm.ViewModel)
+    func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel)
+    func displayAbsentAlertController ()
 }
 
 protocol CitiesRoutingLogic {}
