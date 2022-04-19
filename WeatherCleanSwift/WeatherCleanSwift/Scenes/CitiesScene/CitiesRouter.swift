@@ -11,7 +11,6 @@ import UIKit
 final class CitiesRouter: CitiesRoutingLogic, CitiesDataPassing {
     weak var viewController: UIViewController?
     let dataStore: CitiesDataStore
-
     init(dataStore: CitiesDataStore) {
         self.dataStore = dataStore
     }

@@ -8,10 +8,7 @@
 import Foundation
 
 protocol EndpointProtocol {
-    var urlScheme: String { get set }
-    var host: String { get set }
-    var path: String { get set }
-    var urlQueryItems: [URLQueryItem] { get set }
+    var url: URL? { get }
 }
 protocol NetworkSessionProtocol {
     var session: URLSession { get set }
@@ -19,16 +16,6 @@ protocol NetworkSessionProtocol {
         endpoint: EndpointProtocol,
         completion: @escaping (Result<Success, NetworkError>) -> Void
     )
-}
-extension EndpointProtocol {
-    var url: URL? {
-        var urlComponents = URLComponents()
-        urlComponents.host = host
-        urlComponents.scheme = urlScheme
-        urlComponents.path = path
-        urlComponents.queryItems = urlQueryItems
-        return urlComponents.url
-}
 }
 extension NetworkSessionProtocol {
     func network<Success: Decodable>(
@@ -46,7 +33,7 @@ extension NetworkSessionProtocol {
                     completion(.success(myData))
                 } catch {
                     print(error)
-                    completion(.failure(.badrequest))
+                    completion(.failure(.failureDecoding))
                     return
                 }
             } else {
@@ -59,4 +46,5 @@ extension NetworkSessionProtocol {
 }
 enum NetworkError: Error {
     case badrequest
+    case failureDecoding
 }

@@ -15,21 +15,26 @@ final class CitiesPresenter: CitiesPresentationLogic {
     weak var viewController: CitiesDisplayLogic?
 
     func presentCityWeather(_ response: Cities.WeatherModel) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "MMM d, yyyy"
-        let dateString = Date(timeIntervalSince1970: TimeInterval(response.date))
-        let date = dateFormatter.string(from: dateString)
         viewController?.displayCityWeather(
             Cities.InitForm.ViewModel(
                 location: response.name,
                 description: response.weather?[0].weatherDescription ?? "",
-                time: date,
+                time: Date().prepareTheDate(dataFromServer: response.date),
                 lowTemperature: "L:\(Int(response.main.tempMin).description)",
                 highTemperature: "H:\(Int(response.main.tempMax).description)",
                 temperature: "\(Int(response.main.temp).description)˚",
                 index: 0
             )
         )
+    }
+}
+extension Date {
+    func prepareTheDate(dataFromServer: Int) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        let dateFromInterval = Date(timeIntervalSince1970: TimeInterval(dataFromServer))
+        let date = dateFormatter.string(from: dateFromInterval)
+        return date
     }
 }
