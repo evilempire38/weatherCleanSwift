@@ -8,22 +8,38 @@
 import Foundation
 
 final class CitiesWorker: CitiesWorkerLogic, NetworkSessionProtocol {
-func getBaseWeather(
-        _ request: Cities.InitForm.Request,
-        completion: @escaping (Result<Cities.WeatherModel, NetworkError>) -> Void
-    ) {
-        let endPoint: EndpointProtocol = EndPoint(neededCity: request.city)
-        let completionWrapper: (Result<Cities.WeatherModel, NetworkError>) -> Void = { result in
-            switch result {
-            case.success(let success): completion(.success(success))
-            case.failure(_): completion(.failure(.badrequest))
-            }
-        }
-        network(endpoint: endPoint, completion: completionWrapper)
-    }
+    var storage: CitiesStorageProtocol
     var session: URLSession
-    init(session: URLSession = URLSession(configuration: .default)) {
+    init(
+        storage: CitiesStorageProtocol,
+        session: URLSession = URLSession(configuration: .default)
+    ) {
         self.session = session
+        self.storage = storage
+    }
+    func getBaseWeather(
+        _ request: Cities.InitForm.Request,
+        completion: @escaping (Result<[Cities.WeatherModel], NetworkError>) -> Void
+    ) {
+        if request.firstLoad, let response = storage.loadObject() {
+            completion(.success(response))
+            return
+        } else if request.firstLoad {
+            completion(.failure(.storageIsEmpty))
+            return
+        } else {
+            let endPoint: EndpointProtocol = EndPoint(neededCity: request.city ?? "" )
+            let completionWrapper: (Result<Cities.WeatherModel, NetworkError>) -> Void = { result in
+                switch result {
+                case.success(let success):
+                    self.storage.saveObject(success)
+                    completion(.success([success]))
+                case.failure(_):
+                    completion(.failure(.failureDecoding))
+                }
+            }
+            network(endpoint: endPoint, completion: completionWrapper)
+        }
     }
 }
 private struct EndPoint: EndpointProtocol {
@@ -37,5 +53,13 @@ private struct EndPoint: EndpointProtocol {
         self.urlQueryItems = [URLQueryItem(name: "q", value: neededCity),
                               URLQueryItem(name: "appid", value: "60753fb700c1552fd355ec3461e206e3"),
                               URLQueryItem(name: "units", value: "metric")]
+    }
+    var url: URL? {
+        var urlComponents = URLComponents()
+        urlComponents.host = host
+        urlComponents.scheme = urlScheme
+        urlComponents.path = path
+        urlComponents.queryItems = urlQueryItems
+        return urlComponents.url
     }
 }

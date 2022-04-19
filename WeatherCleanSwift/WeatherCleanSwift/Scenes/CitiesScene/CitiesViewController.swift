@@ -8,20 +8,29 @@
 
 import UIKit
 
-final class CitiesViewController: UIViewController, CitiesDisplayLogic,
-                                  UISearchBarDelegate {
+final class CitiesViewController: UIViewController, CitiesDisplayLogic {
     private let interactor: CitiesBusinessLogic
     private let router: CitiesRoutingLogic
-    let collection: UICollectionView = {
+    private let searchBar = UISearchBar()
+    private let weatherLabel = UILabel()
+    private var weatherDataModel: Cities.InitForm.ViewModel?
+    private var filteredDataModel: Cities.InitForm.ViewModel?
+    private var isSearchingInSearchBar: Bool = false
+    private enum Constants {
+       static var cellNames: String {
+             "citiesCell"
+        }
+    }
+    private let collection: UICollectionView = {
         let collectionLayout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         return collection
     }()
-    let searchBar = UISearchBar()
-    let weatherLabel = UILabel()
-    private var weatherDataModel: [Cities.InitForm.ViewModel] = []
-    private var filteredDataModel: [Cities.InitForm.ViewModel] = []
-    private var isSearchingInSearchBar: Bool = false
+    private let rightBarButton: UIBarButtonItem = {
+       let button = UIButton(type: .custom)
+       button.setBackgroundImage(UIImage(named: "points"), for: .normal)
+       return UIBarButtonItem(customView: button)
+   }()
     init(
         interactor: CitiesBusinessLogic,
         router: CitiesRoutingLogic
@@ -38,27 +47,22 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        self.view.addGestureRecognizer(tapGesture)
-         let rightBarButton: UIBarButtonItem = {
-            let button = UIButton(type: .custom)
-            button.addTarget(self, action: #selector(callAlertController), for: .allTouchEvents)
-            button.setBackgroundImage(UIImage(named: "points"), for: .normal)
-            return UIBarButtonItem(customView: button)
-        }()
-        self.navigationItem.rightBarButtonItem = rightBarButton
         createUI()
         initForm()
     }
-    @objc private func hideKeyboard() {
-        self.view.endEditing(true)
-    }
-
     // MARK: - CitiesDisplayLogic
 
     func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel) {
-        weatherDataModel.append(viewModel)
+        if weatherDataModel == nil {
+            self.weatherDataModel = .init(weatherModel: viewModel.weatherModel)
+        } else {
+            guard var neededArray = self.weatherDataModel?.weatherModel else { return }
+            neededArray.append(contentsOf: viewModel.weatherModel ?? [])
+        }
         collection.reloadData()
+    }
+    func displayStorageIsEmpty() {
+        callAlertController()
     }
     func displayAbsentAlertController () {
         let absentAC = UIAlertController(title: "Oops!", message: "No such city", preferredStyle: .alert)
@@ -70,9 +74,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
     // MARK: - Private
 
     private func initForm() {
-        if weatherDataModel.isEmpty {
-            callAlertController()
-        }
+        interactor.requestWeather(Cities.InitForm.Request(firstLoad: true))
     }
 
     // MARK: - Creating Interface
@@ -80,12 +82,23 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
         setupWeatherLabel()
         setupSearchController()
         setupWeatherCollection()
+        addGestureForHidingKeyboard()
+        addGestureForRightBarButton()
+    }
+    private func addGestureForHidingKeyboard() {
+        let gestureHidingKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        self.view.addGestureRecognizer(gestureHidingKeyboard)
+    }
+    private func addGestureForRightBarButton() {
+        let buttonGesture = UITapGestureRecognizer(target: self, action: #selector(callAlertController))
+        rightBarButton.customView?.addGestureRecognizer(buttonGesture)
     }
 
     private func setupWeatherCollection() {
         self.view.addSubview(collection)
         collection.delegate = self
         collection.dataSource = self
+        self.navigationItem.rightBarButtonItem = rightBarButton
         collection.register(CitiesCollectionViewCell.self, forCellWithReuseIdentifier: "citiesCell")
         collection.backgroundColor = .black
         collection.keyboardDismissMode = .onDrag
@@ -135,8 +148,8 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
         }
         let findAction = UIAlertAction(title: "Find", style: .default) { [weak alertController] _ in
             guard let textFields = alertController?.textFields else { return }
-            if let cityText = textFields[0].text {
-                self.interactor.requestWeather(Cities.InitForm.Request(city: cityText))
+            if let cityText = textFields.first?.text {
+                self.interactor.requestWeather(Cities.InitForm.Request(firstLoad: false, city: cityText))
             }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -144,48 +157,55 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
         alertController.addAction(findAction)
         present(alertController, animated: true)
     }
+    @objc private func hideKeyboard() {
+        self.view.endEditing(true)
+    }
 }
 extension CitiesViewController: UICollectionViewDataSource,
-                                UICollectionViewDelegate,
-                                UICollectionViewDelegateFlowLayout {
+                                UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if isSearchingInSearchBar {
-            return filteredDataModel.count
-        } else {
-            return weatherDataModel.count
+        switch isSearchingInSearchBar {
+        case true : return filteredDataModel?.weatherModel?.count ?? 1
+        case false : return weatherDataModel?.weatherModel?.count ?? 1
         }
     }
 
 func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-guard let cell = collectionView.dequeueReusableCell(
-    withReuseIdentifier: "citiesCell",
-    for: indexPath
-) as? CitiesCollectionViewCell else { return UICollectionViewCell() }
-        let object = isSearchingInSearchBar ? filteredDataModel[indexPath.row] : weatherDataModel[indexPath.row]
-        cell.configure(object: object)
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: Constants.cellNames,
+            for: indexPath
+        ) as? CitiesCollectionViewCell else { return UICollectionViewCell() }
+let object =
+    isSearchingInSearchBar ?
+    filteredDataModel?.weatherModel?[indexPath.row] :
+    weatherDataModel?.weatherModel?[indexPath.row]
+    if let object = object {
+        cell.configure(object: object, indexPath: indexPath.row)
+    }
         return cell
     }
+}
+extension CitiesViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            guard var neededArray = filteredDataModel?.weatherModel else { return }
+            neededArray.removeAll()
+            isSearchingInSearchBar = false
+        } else {
+            isSearchingInSearchBar = true
+            filteredDataModel?.weatherModel = weatherDataModel?.weatherModel?.filter {
+                $0.name.hasPrefix(searchText)
+            } ?? []
+        }
+        collection.reloadData()
+    }
+}
+extension CitiesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-            return CGSize(width: collectionView.frame.width - 20, height: 120)
-        }
-
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filteredDataModel.removeAll()
-            isSearchingInSearchBar = false
-        } else {
-            isSearchingInSearchBar = true
-            filteredDataModel = weatherDataModel.filter { $0.location.hasPrefix(searchText) }
-        }
-        collection.reloadData()
-    }
-}
-private enum Constants {
-    var cellNames: String {
-         "citiesCell"
+        return CGSize(width: collectionView.frame.width - 20, height: 120)
     }
 }
