@@ -8,20 +8,29 @@
 
 import UIKit
 
-final class CitiesViewController: UIViewController, CitiesDisplayLogic,
-                                  UISearchBarDelegate {
+final class CitiesViewController: UIViewController, CitiesDisplayLogic {
     private let interactor: CitiesBusinessLogic
     private let router: CitiesRoutingLogic
-    let collection: UICollectionView = {
+    private let searchBar = UISearchBar()
+    private let weatherLabel = UILabel()
+    private var weatherDataModel: [Cities.InitForm.ViewModel] = []
+    private var filteredDataModel: [Cities.InitForm.ViewModel] = []
+    private var isSearchingInSearchBar: Bool = false
+    private enum Constants {
+       static var cellNames: String {
+             "citiesCell"
+        }
+    }
+    private let collection: UICollectionView = {
         let collectionLayout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         return collection
     }()
-    let searchBar = UISearchBar()
-    let weatherLabel = UILabel()
-    private var weatherDataModel: [Cities.InitForm.ViewModel] = []
-    private var filteredDataModel: [Cities.InitForm.ViewModel] = []
-    private var isSearchingInSearchBar: Bool = false
+    private let rightBarButton: UIBarButtonItem = {
+       let button = UIButton(type: .custom)
+       button.setBackgroundImage(UIImage(named: "points"), for: .normal)
+       return UIBarButtonItem(customView: button)
+   }()
     init(
         interactor: CitiesBusinessLogic,
         router: CitiesRoutingLogic
@@ -38,22 +47,9 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        self.view.addGestureRecognizer(tapGesture)
-         let rightBarButton: UIBarButtonItem = {
-            let button = UIButton(type: .custom)
-            button.addTarget(self, action: #selector(callAlertController), for: .allTouchEvents)
-            button.setBackgroundImage(UIImage(named: "points"), for: .normal)
-            return UIBarButtonItem(customView: button)
-        }()
-        self.navigationItem.rightBarButtonItem = rightBarButton
         createUI()
         initForm()
     }
-    @objc private func hideKeyboard() {
-        self.view.endEditing(true)
-    }
-
     // MARK: - CitiesDisplayLogic
 
     func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel) {
@@ -80,12 +76,23 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
         setupWeatherLabel()
         setupSearchController()
         setupWeatherCollection()
+        addGestureForHidingKeyboard()
+        addGestureForRightBarButton()
+    }
+    private func addGestureForHidingKeyboard() {
+        let gestureHidingKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        self.view.addGestureRecognizer(gestureHidingKeyboard)
+    }
+    private func addGestureForRightBarButton() {
+        let buttonGesture = UITapGestureRecognizer(target: self, action: #selector(callAlertController))
+        rightBarButton.customView?.addGestureRecognizer(buttonGesture)
     }
 
     private func setupWeatherCollection() {
         self.view.addSubview(collection)
         collection.delegate = self
         collection.dataSource = self
+        self.navigationItem.rightBarButtonItem = rightBarButton
         collection.register(CitiesCollectionViewCell.self, forCellWithReuseIdentifier: "citiesCell")
         collection.backgroundColor = .black
         collection.keyboardDismissMode = .onDrag
@@ -144,35 +151,35 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic,
         alertController.addAction(findAction)
         present(alertController, animated: true)
     }
+    @objc private func hideKeyboard() {
+        self.view.endEditing(true)
+    }
 }
 extension CitiesViewController: UICollectionViewDataSource,
-                                UICollectionViewDelegate,
-                                UICollectionViewDelegateFlowLayout {
+                                UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if isSearchingInSearchBar {
-            return filteredDataModel.count
-        } else {
-            return weatherDataModel.count
+        switch isSearchingInSearchBar {
+        case true : return filteredDataModel.count
+        case false : return weatherDataModel.count
         }
     }
 
 func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-guard let cell = collectionView.dequeueReusableCell(
-    withReuseIdentifier: "citiesCell",
-    for: indexPath
-) as? CitiesCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: Constants.cellNames,
+            for: indexPath
+        ) as? CitiesCollectionViewCell else { return UICollectionViewCell() }
         let object = isSearchingInSearchBar ? filteredDataModel[indexPath.row] : weatherDataModel[indexPath.row]
         cell.configure(object: object)
         return cell
     }
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-            return CGSize(width: collectionView.frame.width - 20, height: 120)
-        }
-
+}
+private enum Constants {
+    var cellNames: String {
+         "citiesCell"
+    }
+}
+extension CitiesViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             filteredDataModel.removeAll()
@@ -184,8 +191,12 @@ guard let cell = collectionView.dequeueReusableCell(
         collection.reloadData()
     }
 }
-private enum Constants {
-    var cellNames: String {
-         "citiesCell"
+extension CitiesViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(width: collectionView.frame.width - 20, height: 120)
     }
 }

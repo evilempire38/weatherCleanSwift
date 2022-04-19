@@ -38,4 +38,12 @@ private struct EndPoint: EndpointProtocol {
                               URLQueryItem(name: "appid", value: "60753fb700c1552fd355ec3461e206e3"),
                               URLQueryItem(name: "units", value: "metric")]
     }
+    var url: URL? {
+        var urlComponents = URLComponents()
+        urlComponents.host = host
+        urlComponents.scheme = urlScheme
+        urlComponents.path = path
+        urlComponents.queryItems = urlQueryItems
+        return urlComponents.url
+}
 }

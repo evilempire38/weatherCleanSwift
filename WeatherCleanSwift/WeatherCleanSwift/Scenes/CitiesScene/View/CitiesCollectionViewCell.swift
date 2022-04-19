@@ -14,7 +14,7 @@ class CitiesCollectionViewCell: UICollectionViewCell {
             case basicFont
         }
     }
-    var locationLabel: UILabel = {
+    private var locationLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Constants.FontsName.avenir.rawValue, size: 25)
         label.textColor = .white
@@ -22,7 +22,7 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    var timeLabel: UILabel = {
+    private var timeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Constants.FontsName.avenir.rawValue, size: 16)
         label.textColor = .white
@@ -30,7 +30,7 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    var descriptionLabel: UILabel = {
+    private var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Constants.FontsName.avenir.rawValue, size: 16)
         label.textColor = .white
@@ -40,7 +40,7 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    var temperatureLabel: UILabel = {
+    private var temperatureLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Constants.FontsName.avenir.rawValue, size: 53)
         label.textColor = .white
@@ -48,7 +48,7 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    var lowTemperatureLabel: UILabel = {
+    private var lowTemperatureLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Constants.FontsName.avenir.rawValue, size: 15)
         label.textColor = .white
@@ -56,7 +56,7 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    var highTemperatureLabel: UILabel = {
+    private var highTemperatureLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Constants.FontsName.avenir.rawValue, size: 15)
         label.textColor = .white
@@ -64,7 +64,7 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    var backgroundImageView: UIImageView = {
+    private var backgroundImageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -78,8 +78,7 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         lowTemperatureLabel.text = object.lowTemperature
         backgroundImageView.image = object.cellImage
     }
-    override init(frame: CGRect) {
-        super.init(frame: .zero)
+    private func addSubviews() {
         contentView.addSubview(backgroundImageView)
         backgroundImageView.addSubview(locationLabel)
         backgroundImageView.addSubview(timeLabel)
@@ -87,6 +86,8 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         backgroundImageView.addSubview(temperatureLabel)
         backgroundImageView.addSubview(lowTemperatureLabel)
         backgroundImageView.addSubview(highTemperatureLabel)
+    }
+    private func buildConstraintsForBackgroundImageView() {
         backgroundImageView.topAnchor.constraint(
             equalTo: contentView.topAnchor,
             constant: 0
@@ -107,6 +108,8 @@ class CitiesCollectionViewCell: UICollectionViewCell {
             equalTo: backgroundImageView.leadingAnchor,
             constant: 20
         ).isActive = true
+    }
+    private func buildConstraintsForLocationLabel() {
         locationLabel.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 8).isActive = true
         locationLabel.heightAnchor.constraint(
             equalToConstant: 30
@@ -116,6 +119,8 @@ class CitiesCollectionViewCell: UICollectionViewCell {
             equalTo: locationLabel.bottomAnchor,
             constant: 4
         ).isActive = true
+    }
+    private func buildConstraintsForDescriptionLabel() {
         descriptionLabel.leadingAnchor.constraint(
             equalTo: backgroundImageView.leadingAnchor,
             constant: 20
@@ -124,6 +129,8 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         descriptionLabel.widthAnchor.constraint(
             equalToConstant: 195
         ).isActive = true
+    }
+    private func buildConstraintsForTemperetureLabel() {
         temperatureLabel.topAnchor.constraint(
             equalTo: backgroundImageView.topAnchor,
             constant: 8
@@ -135,6 +142,8 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         temperatureLabel.widthAnchor.constraint(
             equalToConstant: 85
         ).isActive = true
+    }
+    private func buildConstraintsForLowAndHighTemperetureLabel() {
         lowTemperatureLabel.trailingAnchor.constraint(
             equalTo: backgroundImageView.trailingAnchor,
             constant: -20
@@ -149,6 +158,15 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         ).isActive = true
         highTemperatureLabel.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 15).isActive = true
     }
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        addSubviews()
+        buildConstraintsForBackgroundImageView()
+        buildConstraintsForLocationLabel()
+        buildConstraintsForDescriptionLabel()
+        buildConstraintsForTemperetureLabel()
+        buildConstraintsForLowAndHighTemperetureLabel()
+}
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
