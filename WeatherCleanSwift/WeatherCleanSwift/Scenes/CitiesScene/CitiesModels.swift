@@ -106,7 +106,6 @@ enum Cities {
             case icon
         }
     }
-
     struct Wind: Decodable {
         let speed: Double
         let deg: Int

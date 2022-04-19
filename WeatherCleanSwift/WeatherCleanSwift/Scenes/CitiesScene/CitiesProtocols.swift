@@ -25,7 +25,7 @@ protocol CitiesWorkerLogic {
 }
 
 protocol CitiesPresentationLogic {
-    func presentCityWeather(_ response: Cities.WeatherModel)
+    func presentCityWeather(_ response: Cities.InitForm.Response)
     func presentAbsentAlertController ()
 }
 

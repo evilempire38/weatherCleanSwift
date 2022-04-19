@@ -29,8 +29,8 @@ extension NetworkSessionProtocol {
         let task = session.dataTask(with: url) { data, _, _ in
             if let data = data {
                 do {
-                    let myData = try JSONDecoder().decode(Success.self, from: data)
-                    completion(.success(myData))
+                    let success = try JSONDecoder().decode(Success.self, from: data)
+                    completion(.success(success))
                 } catch {
                     print(error)
                     completion(.failure(.failureDecoding))
