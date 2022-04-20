@@ -15,25 +15,34 @@ final class CitiesPresenter: CitiesPresentationLogic {
     weak var viewController: CitiesDisplayLogic?
 
     func presentCityWeather(_ response: Cities.InitForm.Response) {
-        viewController?.displayCityWeather(
-            Cities.InitForm.ViewModel(
-                location: response.weatherModel.name,
-                description: response.weatherModel.weather?[0].weatherDescription ?? "",
-                time: Date().prepareTheDate(dataFromServer: response.weatherModel.date),
-                lowTemperature: "L:\(Int(response.weatherModel.main.tempMin).description)",
-                highTemperature: "H:\(Int(response.weatherModel.main.tempMax).description)",
-                temperature: "\(Int(response.weatherModel.main.temp).description)˚",
-                index: 0
+        let weatherModel = response.weatherModel.map { element in
+            Cities.WeatherModel(
+                coord: element.coord,
+                weather: element.weather,
+                main: element.main,
+                visibility: element.visibility,
+                wind: element.wind,
+                clouds: element.clouds,
+                date: element.date,
+                timezone: element.timezone,
+                id: element.id,
+                name: element.name,
+                cod: element.cod
             )
-        )
+        }
+        let viewModel = Cities.InitForm.ViewModel(weatherModel: weatherModel)
+        viewController?.displayCityWeather(viewModel)
+    }
+    func presentStorageIsEmpty() {
+        viewController?.displayStorageIsEmpty()
     }
 }
 extension Date {
-    func prepareTheDate(dataFromServer: Int) -> String {
+    func prepareTheDate(dateFromServer: Int) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "MMM d, yyyy"
-        let dateFromInterval = Date(timeIntervalSince1970: TimeInterval(dataFromServer))
+        let dateFromInterval = Date(timeIntervalSince1970: TimeInterval(dateFromServer))
         let date = dateFormatter.string(from: dateFromInterval)
         return date
     }

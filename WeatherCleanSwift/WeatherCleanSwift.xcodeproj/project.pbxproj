@@ -20,6 +20,7 @@
 		9A0766DE280758DD008E9261 /* CitiesInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0766D6280758DD008E9261 /* CitiesInteractor.swift */; };
 		9A08B61C2809A6D500ABF97C /* Networkmanager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08B61B2809A6D500ABF97C /* Networkmanager.swift */; };
 		9A240A5C280801C4001DE2DF /* CitiesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A240A5B280801C4001DE2DF /* CitiesCollectionViewCell.swift */; };
+		9A2821A4280EDE43000DF6D8 /* CitiesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2821A3280EDE43000DF6D8 /* CitiesStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		9A0766D6280758DD008E9261 /* CitiesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesInteractor.swift; sourceTree = "<group>"; };
 		9A08B61B2809A6D500ABF97C /* Networkmanager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkmanager.swift; sourceTree = "<group>"; };
 		9A240A5B280801C4001DE2DF /* CitiesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesCollectionViewCell.swift; sourceTree = "<group>"; };
+		9A2821A3280EDE43000DF6D8 /* CitiesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				9A0766D4280758DD008E9261 /* CitiesProtocols.swift */,
 				9A0766D5280758DD008E9261 /* CitiesAssembly.swift */,
 				9A0766D6280758DD008E9261 /* CitiesInteractor.swift */,
+				9A2821A3280EDE43000DF6D8 /* CitiesStorage.swift */,
 				9A240A5A280801A9001DE2DF /* View */,
 			);
 			path = CitiesScene;
@@ -224,6 +227,7 @@
 				9A08B61C2809A6D500ABF97C /* Networkmanager.swift in Sources */,
 				9A0766DE280758DD008E9261 /* CitiesInteractor.swift in Sources */,
 				9A0766D8280758DD008E9261 /* CitiesWorker.swift in Sources */,
+				9A2821A4280EDE43000DF6D8 /* CitiesStorage.swift in Sources */,
 				9A0766D9280758DD008E9261 /* CitiesRouter.swift in Sources */,
 				9A0766D7280758DD008E9261 /* CitiesPresenter.swift in Sources */,
 				9A0766BB28075354008E9261 /* AppDelegate.swift in Sources */,

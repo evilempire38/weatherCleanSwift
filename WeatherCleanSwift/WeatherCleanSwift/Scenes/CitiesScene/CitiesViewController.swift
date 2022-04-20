@@ -13,8 +13,8 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
     private let router: CitiesRoutingLogic
     private let searchBar = UISearchBar()
     private let weatherLabel = UILabel()
-    private var weatherDataModel: [Cities.InitForm.ViewModel] = []
-    private var filteredDataModel: [Cities.InitForm.ViewModel] = []
+    private var weatherDataModel: Cities.InitForm.ViewModel?
+    private var filteredDataModel: Cities.InitForm.ViewModel?
     private var isSearchingInSearchBar: Bool = false
     private enum Constants {
        static var cellNames: String {
@@ -53,8 +53,15 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
     // MARK: - CitiesDisplayLogic
 
     func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel) {
-        weatherDataModel.append(viewModel)
+        if weatherDataModel == nil {
+            self.weatherDataModel = .init(weatherModel: viewModel.weatherModel)
+        } else {
+            self.weatherDataModel?.weatherModel.append(contentsOf: viewModel.weatherModel)
+        }
         collection.reloadData()
+    }
+    func displayStorageIsEmpty() {
+        callAlertController()
     }
     func displayAbsentAlertController () {
         let absentAC = UIAlertController(title: "Oops!", message: "No such city", preferredStyle: .alert)
@@ -66,9 +73,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
     // MARK: - Private
 
     private func initForm() {
-        if weatherDataModel.isEmpty {
-            callAlertController()
-        }
+        interactor.requestWeather(Cities.InitForm.Request(firstLoad: true))
     }
 
     // MARK: - Creating Interface
@@ -143,7 +148,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
         let findAction = UIAlertAction(title: "Find", style: .default) { [weak alertController] _ in
             guard let textFields = alertController?.textFields else { return }
             if let cityText = textFields[0].text {
-                self.interactor.requestWeather(Cities.InitForm.Request(city: cityText))
+                self.interactor.requestWeather(Cities.InitForm.Request(firstLoad: false, city: cityText))
             }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -159,8 +164,8 @@ extension CitiesViewController: UICollectionViewDataSource,
                                 UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch isSearchingInSearchBar {
-        case true : return filteredDataModel.count
-        case false : return weatherDataModel.count
+        case true : return filteredDataModel?.weatherModel.count ?? 1
+        case false : return weatherDataModel?.weatherModel.count ?? 1
         }
     }
 
@@ -169,24 +174,26 @@ func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath:
             withReuseIdentifier: Constants.cellNames,
             for: indexPath
         ) as? CitiesCollectionViewCell else { return UICollectionViewCell() }
-        let object = isSearchingInSearchBar ? filteredDataModel[indexPath.row] : weatherDataModel[indexPath.row]
-        cell.configure(object: object)
-        return cell
+let object =
+    isSearchingInSearchBar ?
+    filteredDataModel?.weatherModel[indexPath.row] :
+    weatherDataModel?.weatherModel[indexPath.row]
+    if let object = object {
+        cell.configure(object: object, indexPath: indexPath.row)
     }
-}
-private enum Constants {
-    var cellNames: String {
-         "citiesCell"
+        return cell
     }
 }
 extension CitiesViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
-            filteredDataModel.removeAll()
+            filteredDataModel?.weatherModel.removeAll()
             isSearchingInSearchBar = false
         } else {
             isSearchingInSearchBar = true
-            filteredDataModel = weatherDataModel.filter { $0.location.hasPrefix(searchText) }
+//            filteredDataModel = weatherDataModel.map({ element in
+//                element.weatherModel.filter { $0.name.hasPrefix(searchText) }
+//            })
         }
         collection.reloadData()
     }

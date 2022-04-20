@@ -18,20 +18,26 @@ protocol CitiesBusinessLogic {
 }
 
 protocol CitiesWorkerLogic {
+    func getBaseWeatherFromUserDefaults(
+    _ request: Cities.InitForm.Request,
+    completion: @escaping ([Cities.WeatherModel]) -> Void
+    )
     func getBaseWeather(
         _ request: Cities.InitForm.Request,
-        completion: @escaping (Result<Cities.WeatherModel, NetworkError>) -> Void
+        completion: @escaping (Result<[Cities.WeatherModel], NetworkError>) -> Void
     )
 }
 
 protocol CitiesPresentationLogic {
     func presentCityWeather(_ response: Cities.InitForm.Response)
     func presentAbsentAlertController ()
+    func presentStorageIsEmpty()
 }
 
 protocol CitiesDisplayLogic: AnyObject {
     func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel)
     func displayAbsentAlertController ()
+    func displayStorageIsEmpty()
 }
 
 protocol CitiesRoutingLogic {}
