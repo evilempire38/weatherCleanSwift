@@ -11,7 +11,8 @@ import UIKit
 enum CitiesAssembly {
     static func build() -> UIViewController {
         let presenter = CitiesPresenter()
-        let worker = CitiesWorker()
+        let storage = CitiesStorage()
+        let worker = CitiesWorker(storage: storage)
         let interactor = CitiesInteractor(presenter: presenter, worker: worker)
         let router = CitiesRouter(dataStore: interactor)
         let viewController = CitiesViewController(interactor: interactor, router: router)

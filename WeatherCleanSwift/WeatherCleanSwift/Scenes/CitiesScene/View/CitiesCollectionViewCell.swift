@@ -69,14 +69,14 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    func configure(object: Cities.InitForm.ViewModel) {
-        locationLabel.text = object.location
-        timeLabel.text = object.time
-        descriptionLabel.text = object.description
-        temperatureLabel.text = object.temperature
-        highTemperatureLabel.text = object.highTemperature
-        lowTemperatureLabel.text = object.lowTemperature
-        backgroundImageView.image = object.cellImage
+    func configure(object: Cities.WeatherModel, indexPath: Int) {
+        locationLabel.text = object.name
+        timeLabel.text = object.dateString
+        descriptionLabel.text = object.weather[0].weatherDescription
+        temperatureLabel.text = "\(Int(object.main.temp).description)˚"
+        highTemperatureLabel.text = "H:\(Int(object.main.tempMax).description)"
+        lowTemperatureLabel.text = "L:\(Int(object.main.tempMin).description)"
+        backgroundImageView.image = UIImage(named: "Group")
     }
     private func addSubviews() {
         contentView.addSubview(backgroundImageView)

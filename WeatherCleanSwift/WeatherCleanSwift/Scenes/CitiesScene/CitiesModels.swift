@@ -11,57 +11,34 @@ import UIKit
 enum Cities {
     enum InitForm {
         struct Request {
-            let city: String
+            let city: String?
+            let firstLoad: Bool
+            init(
+                firstLoad: Bool,
+                city: String? = nil
+            ) {
+                    self.firstLoad = firstLoad
+                    self.city = city
+                }
         }
-        struct Response: Decodable {
-            let weatherModel: WeatherModel
+        struct Response: Codable {
+            let weatherModel: [WeatherModel]
         }
         struct ViewModel {
-            let location: String
-            let time: String
-            let description: String
-            let temperature: String
-            let lowTemperature: String
-            let highTemperature: String
-            let booleanForImage: Bool?
-            var cellImage: UIImage? {
-                if booleanForImage ?? false {
-                    return UIImage(named: "Mask Group")
-                } else {
-                    return UIImage(named: "Group")
-                }
-            }
-            init(
-                location: String,
-                description: String,
-                time: String,
-                lowTemperature: String,
-                highTemperature: String,
-                temperature: String,
-                index: Int
-            ) {
-                self.lowTemperature = lowTemperature
-                self.location = location
-                self.description = description
-                self.highTemperature = highTemperature
-                self.temperature = temperature
-                self.time = time
-                if index.isMultiple(of: 2) {
-                    self.booleanForImage = true
-                } else {
-                    self.booleanForImage = false
-                }
-            }
+            var weatherModel: [WeatherModel]
         }
     }
-    struct WeatherModel: Decodable {
+    struct WeatherModel: Codable {
         let coord: Coord?
-        let weather: [Weather]?
+        let weather: [Weather]
         let main: Main
         let visibility: Int
         let wind: Wind
         let clouds: Clouds
-        let date: Int
+        let date: Date
+        var dateString: String {
+            date.prepareTheDate()
+        }
         let timezone, id: Int
         let name: String
         let cod: Int
@@ -79,14 +56,14 @@ enum Cities {
             case cod
         }
     }
-    struct Clouds: Decodable {
+    struct Clouds: Codable {
         let all: Int
     }
-    struct Coord: Decodable {
+    struct Coord: Codable {
         let lon: Double?
         let lat: Double?
     }
-    struct Main: Decodable {
+    struct Main: Codable {
         let temp, feelsLike, tempMin, tempMax: Double
         let pressure, humidity: Int
         enum CodingKeys: String, CodingKey {
@@ -97,7 +74,7 @@ enum Cities {
             case pressure, humidity
         }
     }
-    struct Weather: Decodable {
+    struct Weather: Codable {
         let id: Int?
         let main, weatherDescription, icon: String
         enum CodingKeys: String, CodingKey {
@@ -106,8 +83,16 @@ enum Cities {
             case icon
         }
     }
-    struct Wind: Decodable {
+    struct Wind: Codable {
         let speed: Double
         let deg: Int
+    }
+}
+private extension Date {
+    func prepareTheDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return dateFormatter.string(from: self)
     }
 }

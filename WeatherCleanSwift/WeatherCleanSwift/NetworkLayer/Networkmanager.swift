@@ -47,4 +47,5 @@ extension NetworkSessionProtocol {
 enum NetworkError: Error {
     case badrequest
     case failureDecoding
+    case storageIsEmpty
 }
