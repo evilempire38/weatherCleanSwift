@@ -70,9 +70,8 @@ class CitiesCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     func configure(object: Cities.WeatherModel, indexPath: Int) {
-        let date = Date().prepareTheDate(dateFromServer: object.date)
         locationLabel.text = object.name
-        timeLabel.text = date
+        timeLabel.text = object.dateString
         descriptionLabel.text = object.weather[0].weatherDescription
         temperatureLabel.text = "\(Int(object.main.temp).description)˚"
         highTemperatureLabel.text = "H:\(Int(object.main.tempMax).description)"

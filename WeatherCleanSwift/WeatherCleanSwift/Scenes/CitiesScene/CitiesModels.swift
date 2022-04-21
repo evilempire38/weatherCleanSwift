@@ -35,7 +35,10 @@ enum Cities {
         let visibility: Int
         let wind: Wind
         let clouds: Clouds
-        let date: Int
+        let date: Date
+        var dateString: String {
+            date.prepareTheDate()
+        }
         let timezone, id: Int
         let name: String
         let cod: Int
@@ -83,5 +86,13 @@ enum Cities {
     struct Wind: Codable {
         let speed: Double
         let deg: Int
+    }
+}
+private extension Date {
+    func prepareTheDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return dateFormatter.string(from: self)
     }
 }

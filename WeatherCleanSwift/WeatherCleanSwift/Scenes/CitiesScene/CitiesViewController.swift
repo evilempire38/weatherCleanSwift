@@ -147,7 +147,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
         }
         let findAction = UIAlertAction(title: "Find", style: .default) { [weak alertController] _ in
             guard let textFields = alertController?.textFields else { return }
-            if let cityText = textFields[0].text {
+            if let cityText = textFields.first?.text {
                 self.interactor.requestWeather(Cities.InitForm.Request(firstLoad: false, city: cityText))
             }
         }
@@ -191,9 +191,7 @@ extension CitiesViewController: UISearchBarDelegate {
             isSearchingInSearchBar = false
         } else {
             isSearchingInSearchBar = true
-//            filteredDataModel = weatherDataModel.map({ element in
-//                element.weatherModel.filter { $0.name.hasPrefix(searchText) }
-//            })
+        filteredDataModel?.weatherModel = weatherDataModel?.weatherModel.filter { $0.name.hasPrefix(searchText) } ?? []
         }
         collection.reloadData()
     }
