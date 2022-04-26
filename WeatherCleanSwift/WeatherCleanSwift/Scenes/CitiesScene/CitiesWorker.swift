@@ -38,10 +38,11 @@ final class CitiesWorker: CitiesWorkerLogic, NetworkSessionProtocol {
                     completion(.failure(.failureDecoding))
                 }
             }
-            network(endpoint: endPoint, completion: completionWrapper)
+           network(endpoint: endPoint, completion: completionWrapper)
         }
     }
 }
+
 private struct EndPoint: EndpointProtocol {
     let neededCity: String
     var urlScheme: String = "https"

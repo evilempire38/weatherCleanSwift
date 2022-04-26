@@ -52,7 +52,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
     }
     // MARK: - CitiesDisplayLogic
 
-    func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel) {
+        func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel) {
         if weatherDataModel == nil {
             self.weatherDataModel = .init(weatherModel: viewModel.weatherModel)
         } else {
@@ -163,7 +163,7 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
 }
 extension CitiesViewController: UICollectionViewDataSource,
                                 UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch isSearchingInSearchBar {
         case true : return filteredDataModel?.weatherModel?.count ?? 1
         case false : return weatherDataModel?.weatherModel?.count ?? 1
@@ -184,9 +184,8 @@ let object =
     }
         return cell
     }
-}
 extension CitiesViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             guard var neededArray = filteredDataModel?.weatherModel else { return }
             neededArray.removeAll()
@@ -199,7 +198,6 @@ extension CitiesViewController: UISearchBarDelegate {
         }
         collection.reloadData()
     }
-}
 extension CitiesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
