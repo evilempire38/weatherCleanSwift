@@ -12,7 +12,7 @@ import XCTest
 final class CitiesPresenterTests: XCTestCase {
     func testPresentCityWeather() {
         let presenter = CitiesPresenter()
-        let mockViewController = CitiesVCMock()
+        let mockViewController = CitiesViewControllerMock()
         presenter.viewController = mockViewController
         let responseMock = makeMockResponse()
         presenter.presentCityWeather(Cities.InitForm.Response(weatherModel: responseMock))
@@ -20,17 +20,14 @@ final class CitiesPresenterTests: XCTestCase {
     }
     func testPresentAbsentAlertController() {
         let presenter = CitiesPresenter()
-        let mockViewController = CitiesVCMock()
+        let mockViewController = CitiesViewControllerMock()
         presenter.viewController = mockViewController
-        let absentExpection = XCTestExpectation(description: "ожидание алерта пустого города")
         presenter.presentAbsentAlertController()
-        absentExpection.fulfill()
-        wait(for: [absentExpection], timeout: 2)
         XCTAssertTrue(mockViewController.displayAbsentAlertControllerWasCalled, "Метод вызван. Жлем флаг true")
     }
     func testPresentStorageIsEmpty() {
         let presenter = CitiesPresenter()
-        let mockViewController = CitiesVCMock()
+        let mockViewController = CitiesViewControllerMock()
         presenter.viewController = mockViewController
         let storageExpection = XCTestExpectation(description: "ожидание storage")
         presenter.presentStorageIsEmpty()

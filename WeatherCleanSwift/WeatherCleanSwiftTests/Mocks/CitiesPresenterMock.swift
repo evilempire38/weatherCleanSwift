@@ -15,16 +15,12 @@ final class CitiesPresenterMock: CitiesPresentationLogic {
     var presentAbsentAlertControllerWasCalled: Bool = false
     var presentStorageIsEmptyWasCalled: Bool = false
     func presentCityWeather(_ response: Cities.InitForm.Response) {
-        let viewModel = Cities.InitForm.ViewModel(weatherModel: response.weatherModel)
-        viewController?.displayCityWeather(viewModel)
         presentCityWeatherWasCalled = true
     }
     func presentAbsentAlertController() {
-        viewController?.displayAbsentAlertController()
         presentAbsentAlertControllerWasCalled = true
     }
     func presentStorageIsEmpty() {
-        viewController?.displayStorageIsEmpty()
         presentStorageIsEmptyWasCalled = true
     }
 }

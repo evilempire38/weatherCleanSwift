@@ -17,7 +17,7 @@ final class CitiesWorkerMock: CitiesWorkerLogic {
     ) {
         getBaseWeatherWasCalled = true
         guard let result = result else {
-            completion(.failure(.jsonError))
+            completion(.failure(.unknownError))
             return
         }
         completion(result)

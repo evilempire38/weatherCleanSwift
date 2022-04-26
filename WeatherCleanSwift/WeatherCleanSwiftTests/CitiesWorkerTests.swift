@@ -62,8 +62,7 @@ final class CitiesWorkerTests: XCTestCase {
         worker.getBaseWeather(request, completion: { _ in
             addCityExpection.fulfill()
         })
-        wait(for: [addCityExpection], timeout: 3)
-        XCTAssertFalse(request.firstLoad, "Заходим не первый раз, возвращаем флаг false")
+        wait(for: [addCityExpection], timeout: 1)
         XCTAssertTrue(mockStorage.isObjectSaved, "Объект должен сохраниться, возвращая флаг true")
     }
     func testsIsUnknownCity() {
@@ -74,7 +73,7 @@ final class CitiesWorkerTests: XCTestCase {
         worker.getBaseWeather(request, completion: {_ in
             addAbsentAllerExpection.fulfill()
         })
-        wait(for: [addAbsentAllerExpection], timeout: 2)
+        wait(for: [addAbsentAllerExpection], timeout: 1)
         XCTAssertFalse(mockStorage.isObjectSaved, "Объект несохранен, тк не нашли города. Вернем false")
     }
 }

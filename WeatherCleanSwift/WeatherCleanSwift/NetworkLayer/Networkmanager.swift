@@ -49,4 +49,5 @@ enum NetworkError: Error {
     case failureDecoding
     case storageIsEmpty
     case jsonError
+    case unknownError
 }

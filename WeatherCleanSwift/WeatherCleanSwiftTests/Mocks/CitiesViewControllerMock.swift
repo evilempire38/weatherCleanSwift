@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 @testable import WeatherCleanSwift
 
-final class CitiesVCMock: CitiesDisplayLogic {
+final class CitiesViewControllerMock: CitiesDisplayLogic {
     var displayCityWeatherWasCalled: Bool = false
     var displayAbsentAlertControllerWasCalled: Bool = false
     var displayStorageIsEmptyWasCalled: Bool = false

@@ -24,7 +24,7 @@
 		9A4079702811502D0074BA0A /* StorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A40796F2811502C0074BA0A /* StorageMock.swift */; };
 		9A407972281155000074BA0A /* CitiesWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A407971281155000074BA0A /* CitiesWorkerTests.swift */; };
 		9A4079762811937C0074BA0A /* CitiesPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4079752811937B0074BA0A /* CitiesPresenterTests.swift */; };
-		9A407978281198690074BA0A /* CitiesVCMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A407977281198690074BA0A /* CitiesVCMock.swift */; };
+		9A407978281198690074BA0A /* CitiesViewControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A407977281198690074BA0A /* CitiesViewControllerMock.swift */; };
 		9A534669281677F300CF2BFB /* CitiesInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A534668281677F300CF2BFB /* CitiesInteractorTests.swift */; };
 		9A53466B28167E8C00CF2BFB /* CitiesPresenterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53466A28167E8C00CF2BFB /* CitiesPresenterMock.swift */; };
 		9A53466D2816813800CF2BFB /* CitiesWorkerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53466C2816813800CF2BFB /* CitiesWorkerMock.swift */; };
@@ -60,7 +60,7 @@
 		9A40796F2811502C0074BA0A /* StorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMock.swift; sourceTree = "<group>"; };
 		9A407971281155000074BA0A /* CitiesWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesWorkerTests.swift; sourceTree = "<group>"; };
 		9A4079752811937B0074BA0A /* CitiesPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesPresenterTests.swift; sourceTree = "<group>"; };
-		9A407977281198690074BA0A /* CitiesVCMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesVCMock.swift; sourceTree = "<group>"; };
+		9A407977281198690074BA0A /* CitiesViewControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesViewControllerMock.swift; sourceTree = "<group>"; };
 		9A534668281677F300CF2BFB /* CitiesInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesInteractorTests.swift; sourceTree = "<group>"; };
 		9A53466A28167E8C00CF2BFB /* CitiesPresenterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesPresenterMock.swift; sourceTree = "<group>"; };
 		9A53466C2816813800CF2BFB /* CitiesWorkerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesWorkerMock.swift; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 			children = (
 				9A40796F2811502C0074BA0A /* StorageMock.swift */,
 				9A53466A28167E8C00CF2BFB /* CitiesPresenterMock.swift */,
-				9A407977281198690074BA0A /* CitiesVCMock.swift */,
+				9A407977281198690074BA0A /* CitiesViewControllerMock.swift */,
 				9A53466C2816813800CF2BFB /* CitiesWorkerMock.swift */,
 			);
 			path = Mocks;
@@ -331,7 +331,7 @@
 			files = (
 				9A407972281155000074BA0A /* CitiesWorkerTests.swift in Sources */,
 				9A53466B28167E8C00CF2BFB /* CitiesPresenterMock.swift in Sources */,
-				9A407978281198690074BA0A /* CitiesVCMock.swift in Sources */,
+				9A407978281198690074BA0A /* CitiesViewControllerMock.swift in Sources */,
 				9A4079762811937C0074BA0A /* CitiesPresenterTests.swift in Sources */,
 				9A4079702811502D0074BA0A /* StorageMock.swift in Sources */,
 				9A53466D2816813800CF2BFB /* CitiesWorkerMock.swift in Sources */,
