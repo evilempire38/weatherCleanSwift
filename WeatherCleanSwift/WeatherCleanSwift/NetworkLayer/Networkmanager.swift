@@ -48,4 +48,6 @@ enum NetworkError: Error {
     case badrequest
     case failureDecoding
     case storageIsEmpty
+    case jsonError
+    case unknownError
 }

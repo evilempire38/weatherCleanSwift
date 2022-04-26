@@ -22,10 +22,10 @@ enum Cities {
                 }
         }
         struct Response: Codable {
-            let weatherModel: [WeatherModel]
+            let weatherModel: [WeatherModel]?
         }
         struct ViewModel {
-            var weatherModel: [WeatherModel]
+            var weatherModel: [WeatherModel]?
         }
     }
     struct WeatherModel: Codable {

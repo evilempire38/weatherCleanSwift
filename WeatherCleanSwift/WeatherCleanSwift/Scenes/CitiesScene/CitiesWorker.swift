@@ -35,23 +35,14 @@ final class CitiesWorker: CitiesWorkerLogic, NetworkSessionProtocol {
                     self.storage.saveObject(success)
                     completion(.success([success]))
                 case.failure(_):
-                    completion(.failure(.badrequest))
+                    completion(.failure(.failureDecoding))
                 }
             }
-            network(endpoint: endPoint, completion: completionWrapper)
+           network(endpoint: endPoint, completion: completionWrapper)
         }
-    }
-    func getBaseWeatherFromUserDefaults(
-        _ request: Cities.InitForm.Request,
-        completion: @escaping ([Cities.WeatherModel]
-        ) -> Void
-    ) {
-        if let object = storage.loadObject() {
-            completion(object)
-        }
-        return completion([])
     }
 }
+
 private struct EndPoint: EndpointProtocol {
     let neededCity: String
     var urlScheme: String = "https"

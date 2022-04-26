@@ -21,7 +21,14 @@
 		9A08B61C2809A6D500ABF97C /* Networkmanager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08B61B2809A6D500ABF97C /* Networkmanager.swift */; };
 		9A240A5C280801C4001DE2DF /* CitiesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A240A5B280801C4001DE2DF /* CitiesCollectionViewCell.swift */; };
 		9A2821A4280EDE43000DF6D8 /* CitiesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2821A3280EDE43000DF6D8 /* CitiesStorage.swift */; };
-		9A9C738B28114A7800A18615 /* WeatherCleanSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9C738A28114A7800A18615 /* WeatherCleanSwiftTests.swift */; };
+		9A4079702811502D0074BA0A /* StorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A40796F2811502C0074BA0A /* StorageMock.swift */; };
+		9A407972281155000074BA0A /* CitiesWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A407971281155000074BA0A /* CitiesWorkerTests.swift */; };
+		9A4079762811937C0074BA0A /* CitiesPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4079752811937B0074BA0A /* CitiesPresenterTests.swift */; };
+		9A407978281198690074BA0A /* CitiesViewControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A407977281198690074BA0A /* CitiesViewControllerMock.swift */; };
+		9A534669281677F300CF2BFB /* CitiesInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A534668281677F300CF2BFB /* CitiesInteractorTests.swift */; };
+		9A53466B28167E8C00CF2BFB /* CitiesPresenterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53466A28167E8C00CF2BFB /* CitiesPresenterMock.swift */; };
+		9A53466D2816813800CF2BFB /* CitiesWorkerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53466C2816813800CF2BFB /* CitiesWorkerMock.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +58,17 @@
 		9A08B61B2809A6D500ABF97C /* Networkmanager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkmanager.swift; sourceTree = "<group>"; };
 		9A240A5B280801C4001DE2DF /* CitiesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesCollectionViewCell.swift; sourceTree = "<group>"; };
 		9A2821A3280EDE43000DF6D8 /* CitiesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesStorage.swift; sourceTree = "<group>"; };
+		9A40796F2811502C0074BA0A /* StorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMock.swift; sourceTree = "<group>"; };
+		9A407971281155000074BA0A /* CitiesWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesWorkerTests.swift; sourceTree = "<group>"; };
+		9A4079752811937B0074BA0A /* CitiesPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesPresenterTests.swift; sourceTree = "<group>"; };
+		9A407977281198690074BA0A /* CitiesViewControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesViewControllerMock.swift; sourceTree = "<group>"; };
+		9A534668281677F300CF2BFB /* CitiesInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesInteractorTests.swift; sourceTree = "<group>"; };
+		9A53466A28167E8C00CF2BFB /* CitiesPresenterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesPresenterMock.swift; sourceTree = "<group>"; };
+		9A53466C2816813800CF2BFB /* CitiesWorkerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesWorkerMock.swift; sourceTree = "<group>"; };
+		9A9C738828114A7800A18615 /* WeatherCleanSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherCleanSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A9C738828114A7800A18615 /* WeatherCleanSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherCleanSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A9C738A28114A7800A18615 /* WeatherCleanSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCleanSwiftTests.swift; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,7 +173,10 @@
 			isa = PBXGroup;
 			children = (
 				9A9C739128114A8200A18615 /* Mocks */,
-				9A9C738A28114A7800A18615 /* WeatherCleanSwiftTests.swift */,
+				9A407971281155000074BA0A /* CitiesWorkerTests.swift */,
+				9A4079752811937B0074BA0A /* CitiesPresenterTests.swift */,
+				9A534668281677F300CF2BFB /* CitiesInteractorTests.swift */,
+
 			);
 			path = WeatherCleanSwiftTests;
 			sourceTree = "<group>";
@@ -165,6 +184,11 @@
 		9A9C739128114A8200A18615 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+
+				9A40796F2811502C0074BA0A /* StorageMock.swift */,
+				9A53466A28167E8C00CF2BFB /* CitiesPresenterMock.swift */,
+				9A407977281198690074BA0A /* CitiesViewControllerMock.swift */,
+				9A53466C2816813800CF2BFB /* CitiesWorkerMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -311,7 +335,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A9C738B28114A7800A18615 /* WeatherCleanSwiftTests.swift in Sources */,
+				9A407972281155000074BA0A /* CitiesWorkerTests.swift in Sources */,
+				9A53466B28167E8C00CF2BFB /* CitiesPresenterMock.swift in Sources */,
+				9A407978281198690074BA0A /* CitiesViewControllerMock.swift in Sources */,
+				9A4079762811937C0074BA0A /* CitiesPresenterTests.swift in Sources */,
+				9A4079702811502D0074BA0A /* StorageMock.swift in Sources */,
+				9A53466D2816813800CF2BFB /* CitiesWorkerMock.swift in Sources */,
+				9A534669281677F300CF2BFB /* CitiesInteractorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

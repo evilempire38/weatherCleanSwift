@@ -10,11 +10,10 @@ import Foundation
 import UIKit
 
 final class CitiesPresenter: CitiesPresentationLogic {
+    weak var viewController: CitiesDisplayLogic?
     func presentAbsentAlertController() {
         viewController?.displayAbsentAlertController()
     }
-    weak var viewController: CitiesDisplayLogic?
-
     func presentCityWeather(_ response: Cities.InitForm.Response) {
         let viewWeatherModel = Cities.InitForm.ViewModel(weatherModel: response.weatherModel)
         viewController?.displayCityWeather(viewWeatherModel)

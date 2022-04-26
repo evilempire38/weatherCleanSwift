@@ -52,11 +52,12 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
     }
     // MARK: - CitiesDisplayLogic
 
-    func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel) {
+        func displayCityWeather(_ viewModel: Cities.InitForm.ViewModel) {
         if weatherDataModel == nil {
             self.weatherDataModel = .init(weatherModel: viewModel.weatherModel)
         } else {
-            self.weatherDataModel?.weatherModel.append(contentsOf: viewModel.weatherModel)
+            guard var neededArray = self.weatherDataModel?.weatherModel else { return }
+            neededArray.append(contentsOf: viewModel.weatherModel ?? [])
         }
         collection.reloadData()
     }
@@ -162,10 +163,10 @@ final class CitiesViewController: UIViewController, CitiesDisplayLogic {
 }
 extension CitiesViewController: UICollectionViewDataSource,
                                 UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch isSearchingInSearchBar {
-        case true : return filteredDataModel?.weatherModel.count ?? 1
-        case false : return weatherDataModel?.weatherModel.count ?? 1
+        case true : return filteredDataModel?.weatherModel?.count ?? 1
+        case false : return weatherDataModel?.weatherModel?.count ?? 1
         }
     }
 
@@ -176,26 +177,27 @@ func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath:
         ) as? CitiesCollectionViewCell else { return UICollectionViewCell() }
 let object =
     isSearchingInSearchBar ?
-    filteredDataModel?.weatherModel[indexPath.row] :
-    weatherDataModel?.weatherModel[indexPath.row]
+    filteredDataModel?.weatherModel?[indexPath.row] :
+    weatherDataModel?.weatherModel?[indexPath.row]
     if let object = object {
         cell.configure(object: object, indexPath: indexPath.row)
     }
         return cell
     }
-}
 extension CitiesViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
-            filteredDataModel?.weatherModel.removeAll()
+            guard var neededArray = filteredDataModel?.weatherModel else { return }
+            neededArray.removeAll()
             isSearchingInSearchBar = false
         } else {
             isSearchingInSearchBar = true
-        filteredDataModel?.weatherModel = weatherDataModel?.weatherModel.filter { $0.name.hasPrefix(searchText) } ?? []
+            filteredDataModel?.weatherModel = weatherDataModel?.weatherModel?.filter {
+                $0.name.hasPrefix(searchText)
+            } ?? []
         }
         collection.reloadData()
     }
-}
 extension CitiesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
