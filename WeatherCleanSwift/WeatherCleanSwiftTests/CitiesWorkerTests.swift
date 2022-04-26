@@ -55,15 +55,22 @@ final class CitiesWorkerTests: XCTestCase {
         XCTAssertTrue(mockStorage.isObjectLoaded, "Должен вернуться флаг true")
     }
     func testsIsCityAdded() {
+        let jsonSuccess = JsonMock()
+        let sessionMock = URLSessionMock(data: jsonSuccess.success, response: nil, error: nil)
         let request = Cities.InitForm.Request(firstLoad: false, city: "Moscow")
         let mockStorage = StorageMock()
-        let worker = CitiesWorker(storage: mockStorage)
+        let worker = CitiesWorker(storage: mockStorage, session: sessionMock)
         let addCityExpection = XCTestExpectation(description: "Добавление города")
-        worker.getBaseWeather(request, completion: { _ in
-            addCityExpection.fulfill()
-        })
+        worker.getBaseWeather(request) { result in
+            switch result {
+            case .success(_):
+                XCTAssertTrue(mockStorage.isObjectSaved, "Объект должен сохраниться, возвращая флаг true")
+                addCityExpection.fulfill()
+            case .failure(let error):
+                XCTFail("\(error)")
+            }
+        }
         wait(for: [addCityExpection], timeout: 1)
-        XCTAssertTrue(mockStorage.isObjectSaved, "Объект должен сохраниться, возвращая флаг true")
     }
     func testsIsUnknownCity() {
         let request = Cities.InitForm.Request(firstLoad: false, city: "aWaefrgs")
