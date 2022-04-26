@@ -73,13 +73,20 @@ final class CitiesWorkerTests: XCTestCase {
         wait(for: [addCityExpection], timeout: 1)
     }
     func testsIsUnknownCity() {
+        let sessionMock = URLSessionMock(data: nil, response: nil, error: .unknownError)
         let request = Cities.InitForm.Request(firstLoad: false, city: "aWaefrgs")
         let mockStorage = StorageMock()
-        let worker = CitiesWorker(storage: mockStorage)
+        let worker = CitiesWorker(storage: mockStorage, session: sessionMock)
         let addAbsentAllerExpection = XCTestExpectation(description: "Ожидание для absentAlertController")
-        worker.getBaseWeather(request, completion: {_ in
-            addAbsentAllerExpection.fulfill()
-        })
+        worker.getBaseWeather(request) { result in
+            switch result {
+            case .success(let success):
+                XCTFail("found \(success) instead of fail")
+            case .failure(let error):
+                XCTAssertFalse(mockStorage.isObjectSaved, "Объект несохранен, тк \(error). Вернем false")
+                addAbsentAllerExpection.fulfill()
+            }
+        }
         wait(for: [addAbsentAllerExpection], timeout: 1)
         XCTAssertFalse(mockStorage.isObjectSaved, "Объект несохранен, тк не нашли города. Вернем false")
     }
@@ -87,9 +94,9 @@ final class CitiesWorkerTests: XCTestCase {
 private class URLSessionMock: URLSession {
     var data: Data?
     var response: URLResponse?
-    var error: Error?
+    var error: NetworkError?
     var mockTask: MockTask
-    init(data: Data?, response: URLResponse?, error: Error?) {
+    init(data: Data?, response: URLResponse?, error: NetworkError?) {
         mockTask = MockTask(data: data, response: response, error: error)
     }
     override func dataTask(
