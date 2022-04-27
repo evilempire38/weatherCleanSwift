@@ -10,8 +10,8 @@ import XCTest
 @testable import WeatherCleanSwift
 
 final class CitiesPresenterTests: XCTestCase {
-    let presenter = CitiesPresenter()
-    let mockViewController = CitiesViewControllerMock()
+    private let presenter = CitiesPresenter()
+    private let mockViewController = CitiesViewControllerMock()
     func testPresentCityWeather() {
         presenter.viewController = mockViewController
         presenter.presentCityWeather(Cities.InitForm.Response(weatherModel: []))

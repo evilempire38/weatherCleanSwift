@@ -34,8 +34,8 @@ final class CitiesWorker: CitiesWorkerLogic, NetworkSessionProtocol {
                 case.success(let success):
                     self.storage.saveObject(success)
                     completion(.success([success]))
-                case.failure(_):
-                    completion(.failure(.unknownError))
+                case.failure(let error):
+                    completion(.failure(error))
                 }
             }
            network(endpoint: endPoint, completion: completionWrapper)

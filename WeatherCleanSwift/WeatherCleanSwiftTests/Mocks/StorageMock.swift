@@ -11,14 +11,14 @@ import Foundation
 final class StorageMock: CitiesStorageProtocol {
     var isObjectSaved = false
     var isObjectLoaded = false
-    var object: Cities.WeatherModel?
-    var saveObject: [Cities.WeatherModel]?
+    var savedMockObject: Cities.WeatherModel?
+    var loadedMockObject: [Cities.WeatherModel]?
     func saveObject(_ object: Cities.WeatherModel) {
         isObjectSaved = true
-        self.object = object
+        self.savedMockObject = object
     }
     func loadObject() -> [Cities.WeatherModel]? {
         isObjectLoaded = true
-        return saveObject
+        return loadedMockObject
     }
 }

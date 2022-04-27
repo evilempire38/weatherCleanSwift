@@ -10,8 +10,8 @@ import XCTest
 @testable import WeatherCleanSwift
 
 final class CitiesInteractorTests: XCTestCase {
-    let presenter = CitiesPresenterMock()
-    let worker = CitiesWorkerMock()
+    private let presenter = CitiesPresenterMock()
+    private let worker = CitiesWorkerMock()
     func testPresentCityWeatherWasCalled() {
         worker.result = .success(success)
         let interactor = CitiesInteractor(presenter: presenter, worker: worker)
