@@ -35,7 +35,7 @@ final class CitiesWorker: CitiesWorkerLogic, NetworkSessionProtocol {
                     self.storage.saveObject(success)
                     completion(.success([success]))
                 case.failure(_):
-                    completion(.failure(.failureDecoding))
+                    completion(.failure(.unknownError))
                 }
             }
            network(endpoint: endPoint, completion: completionWrapper)

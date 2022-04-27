@@ -10,36 +10,6 @@ import XCTest
 @testable import WeatherCleanSwift
 
 final class CitiesInteractorTests: XCTestCase {
-    var success: [Cities.WeatherModel] = [Cities.WeatherModel(
-        coord: Cities.Coord(
-            lon: 32,
-            lat: 23
-        ),
-        weather: [Cities.Weather(
-            id: 32,
-            main: "we",
-            weatherDescription: "awd",
-            icon: "dw"
-        )
-                 ],
-        main: Cities.Main(
-            temp: 23,
-            feelsLike: 23,
-            tempMin: 23,
-            tempMax: 23,
-            pressure: 2332,
-            humidity: 2323
-        ),
-        visibility: 2323,
-        wind: Cities.Wind(speed: 32, deg: 23),
-        clouds: Cities.Clouds(all: 33),
-        date: Date(),
-        timezone: 3,
-        id: 2,
-        name: "Moscow",
-        cod: 23
-    )
-    ]
     let presenter = CitiesPresenterMock()
     let worker = CitiesWorkerMock()
     func testPresentCityWeatherWasCalled() {
@@ -88,4 +58,34 @@ final class CitiesInteractorTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 1)
     }
+    private var success: [Cities.WeatherModel] = [Cities.WeatherModel(
+        coord: Cities.Coord(
+            lon: 32,
+            lat: 23
+        ),
+        weather: [Cities.Weather(
+            id: 32,
+            main: "we",
+            weatherDescription: "awd",
+            icon: "dw"
+        )
+                 ],
+        main: Cities.Main(
+            temp: 23,
+            feelsLike: 23,
+            tempMin: 23,
+            tempMax: 23,
+            pressure: 2332,
+            humidity: 2323
+        ),
+        visibility: 2323,
+        wind: Cities.Wind(speed: 32, deg: 23),
+        clouds: Cities.Clouds(all: 33),
+        date: Date(),
+        timezone: 3,
+        id: 2,
+        name: "Moscow",
+        cod: 23
+    )
+    ]
 }
