@@ -10,6 +10,25 @@ import XCTest
 @testable import WeatherCleanSwift
 
 final class CitiesWorkerTests: XCTestCase {
+    func testStorageSaveObject() {
+        let jsonMock = JsonMock()
+        let storageMock = StorageMock()
+        let sessionMock = URLSessionMock(data: jsonMock.success, response: nil, error: nil)
+        let worker = CitiesWorker(storage: storageMock, session: sessionMock)
+        let request = Cities.InitForm.Request(firstLoad: false, city: "Moscow")
+        let expectaionToSave = expectation(description: "\(#function)\(#line) try to save object")
+        worker.getBaseWeather(request) { result in
+            switch result {
+            case .success(let success):
+                let object = success.first
+                XCTAssert(request.city == object?.name, "город запрошенный и сохраненный совпадают")
+                expectaionToSave.fulfill()
+            case .failure(let error):
+                XCTFail("что-то пошло не так\(error)")
+            }
+        }
+        wait(for: [expectaionToSave], timeout: 1)
+    }
     func testIsDecodeFailure() {
         let jsonMock = JsonMock()
         let storageMock = StorageMock()
@@ -17,7 +36,7 @@ final class CitiesWorkerTests: XCTestCase {
         let worker = CitiesWorker(storage: storageMock, session: sessionMock)
         let request = Cities.InitForm.Request(firstLoad: false, city: "Mocsow")
         let expeсtationFailureDecoding = expectation(description: "\(#function)\(#line) failure decoding")
-        worker.getBaseWeather(request, completion: { result in
+        worker.getBaseWeather(request) { result in
             switch result {
             case .success(let success):
                 XCTFail("Got \(success) instead of error")
@@ -25,7 +44,7 @@ final class CitiesWorkerTests: XCTestCase {
                 XCTAssert(error == .unknownError)
             }
             expeсtationFailureDecoding.fulfill()
-        })
+        }
         wait(for: [expeсtationFailureDecoding], timeout: 1)
     }
     func testIsDecodeSuccess() {
