@@ -10,49 +10,82 @@ import XCTest
 @testable import WeatherCleanSwift
 
 final class CitiesWorkerTests: XCTestCase {
-    func testIsDecodeFailure() {
+    func testStorageSaveObject() {
+        let jsonMock = JsonMock()
         let storageMock = StorageMock()
-        let sessionMock = URLSessionMock(data: nil, response: nil, error: nil)
+        let sessionMock = URLSessionMock(data: jsonMock.success, response: nil, error: nil)
         let worker = CitiesWorker(storage: storageMock, session: sessionMock)
-        let request = Cities.InitForm.Request(firstLoad: false, city: "Mocsow")
-        let jsonMockFailure = JsonMock()
-        sessionMock.data = jsonMockFailure.failure
-        let expeсtationFailureDecoding = expectation(description: "\(#function)\(#line) failure decoding")
-        worker.getBaseWeather(request, completion: { result in
-            switch result {
-            case .success(let success):
-                XCTFail("Got \(success) instead of error")
-            case .failure(let error):
-                XCTAssert(error == .failureDecoding)
-            }
-            expeсtationFailureDecoding.fulfill()
-        })
-        wait(for: [expeсtationFailureDecoding], timeout: 1)
-    }
-    func testIsDecodeSuccess() {
-        let jsonMockFailure = JsonMock()
-        let storageMock = StorageMock()
-        let sessionMock = URLSessionMock(data: jsonMockFailure.success, response: nil, error: nil)
-        let worker = CitiesWorker(storage: storageMock, session: sessionMock)
-        let request = Cities.InitForm.Request(firstLoad: false, city: "Mocsow")
-        let expeсtationFailureDecoding = expectation(description: "\(#function)\(#line) failure decoding")
+        let request = Cities.InitForm.Request(firstLoad: false, city: "Moscow")
+        let expectaionToSave = XCTestExpectation(description: "\(#function)\(#line) try to save object")
         worker.getBaseWeather(request) { result in
             switch result {
             case .success(let success):
-                XCTAssert(success[0].name == "Moscow", "должны получать Moscow")
+                XCTAssert(
+                    storageMock.savedMockObject?.name == success.first?.name,
+                    "Должен сохраниться правильный объект"
+                )
+                expectaionToSave.fulfill()
+            case .failure(_):
+                XCTFail("Должен придти success")
+            }
+        }
+        wait(for: [expectaionToSave], timeout: 1)
+    }
+    func testIsDecodeFailure() {
+        let jsonMock = JsonMock()
+        let storageMock = StorageMock()
+        let sessionMock = URLSessionMock(data: jsonMock.failure, response: nil, error: nil)
+        let worker = CitiesWorker(storage: storageMock, session: sessionMock)
+        let request = Cities.InitForm.Request(firstLoad: false, city: "Mocsow")
+        let expeсtationFailureDecoding = XCTestExpectation(description: "\(#function)\(#line) failure decoding")
+        worker.getBaseWeather(request) { result in
+            switch result {
+            case .success(_):
+                XCTFail("Получен success вместо error")
             case .failure(let error):
-                XCTFail("got \(error) instead of success")
+                XCTAssert(error == .failureDecoding, "Должна вернуться ошибка с .failureDecoding")
             }
             expeсtationFailureDecoding.fulfill()
         }
         wait(for: [expeсtationFailureDecoding], timeout: 1)
     }
-    func testsIsRequestStorage() {
+    func testIsDecodeSuccess() {
+        let jsonMock = JsonMock()
+        let storageMock = StorageMock()
+        let sessionMock = URLSessionMock(data: jsonMock.success, response: nil, error: nil)
+        let worker = CitiesWorker(storage: storageMock, session: sessionMock)
+        let request = Cities.InitForm.Request(firstLoad: false, city: "Mocsow")
+        let expeсtationSuccessDecoding = XCTestExpectation(description: "\(#function)\(#line) success decoding")
+        worker.getBaseWeather(request) { result in
+            switch result {
+            case .success(let success):
+                XCTAssert(success[0].name == "Moscow", "должны получать Moscow")
+            case .failure(_):
+                XCTFail("получена ошибка вместо success")
+            }
+            expeсtationSuccessDecoding.fulfill()
+        }
+        wait(for: [expeсtationSuccessDecoding], timeout: 1)
+    }
+    func testsIsRequestStorageAndValidDataLoaded() {
+        let sessionMock = URLSessionMock(data: nil, response: nil, error: nil)
         let request = Cities.InitForm.Request(firstLoad: true)
         let mockStorage = StorageMock()
+        mockStorage.loadedMockObject = mockedObject
         let worker = CitiesWorker(storage: mockStorage)
-        worker.getBaseWeather(request, completion: { _ in })
-        XCTAssertTrue(mockStorage.isObjectLoaded, "Должен вернуться флаг true")
+        worker.getBaseWeather(request) { result in
+            switch result {
+            case .success(let success):
+                XCTAssert(
+                    mockStorage.loadedMockObject?.first?.cod == success.first?.cod,
+                    "Данные должны вернуться из storage"
+                )
+                XCTAssertFalse(sessionMock.wasAccessToNetwork, "Мы не должны ходить в сеть")
+                XCTAssertTrue(mockStorage.isObjectLoaded, "Должен вернуться флаг true")
+            case .failure(_):
+                XCTFail("Пришла ошибка")
+            }
+        }
     }
     func testsIsCityAdded() {
         let jsonSuccess = JsonMock()
@@ -66,29 +99,67 @@ final class CitiesWorkerTests: XCTestCase {
             case .success(_):
                 XCTAssertTrue(mockStorage.isObjectSaved, "Объект должен сохраниться, возвращая флаг true")
                 addCityExpection.fulfill()
-            case .failure(let error):
-                XCTFail("\(error)")
+            case .failure(_):
+                XCTFail("Получена ошибка вместо success")
             }
         }
         wait(for: [addCityExpection], timeout: 1)
     }
     func testsIsUnknownCity() {
+        let sessionMock = URLSessionMock(data: nil, response: nil, error: nil)
         let request = Cities.InitForm.Request(firstLoad: false, city: "aWaefrgs")
         let mockStorage = StorageMock()
-        let worker = CitiesWorker(storage: mockStorage)
+        let worker = CitiesWorker(storage: mockStorage, session: sessionMock)
         let addAbsentAllerExpection = XCTestExpectation(description: "Ожидание для absentAlertController")
-        worker.getBaseWeather(request, completion: {_ in
+        worker.getBaseWeather(request) { result in
+            XCTAssertTrue(sessionMock.wasAccessToNetwork, "Выходили в сеть. Ждем true")
+            switch result {
+            case .success(_):
+                XCTFail("Получили success вместо fail")
+            case .failure(_):
+                XCTAssertFalse(mockStorage.isObjectSaved, "Объект несохранен, тк возникла ошибка. Вернем false")
+            }
             addAbsentAllerExpection.fulfill()
-        })
+        }
         wait(for: [addAbsentAllerExpection], timeout: 1)
-        XCTAssertFalse(mockStorage.isObjectSaved, "Объект несохранен, тк не нашли города. Вернем false")
     }
+    private var mockedObject: [Cities.WeatherModel] = [Cities.WeatherModel(
+        coord: Cities.Coord(
+            lon: 32,
+            lat: 23
+        ),
+        weather: [Cities.Weather(
+            id: 32,
+            main: "we",
+            weatherDescription: "awd",
+            icon: "dw"
+        )
+                 ],
+        main: Cities.Main(
+            temp: 23,
+            feelsLike: 23,
+            tempMin: 23,
+            tempMax: 23,
+            pressure: 2332,
+            humidity: 2323
+        ),
+        visibility: 2323,
+        wind: Cities.Wind(speed: 32, deg: 23),
+        clouds: Cities.Clouds(all: 33),
+        date: Date(),
+        timezone: 3,
+        id: 2,
+        name: "Moscow",
+        cod: 23
+    )
+    ]
 }
 private class URLSessionMock: URLSession {
     var data: Data?
     var response: URLResponse?
-    var error: Error?
+    var error: NetworkError?
     var mockTask: MockTask
+    var wasAccessToNetwork: Bool = false
     init(data: Data?, response: URLResponse?, error: Error?) {
         mockTask = MockTask(data: data, response: response, error: error)
     }
@@ -96,6 +167,7 @@ private class URLSessionMock: URLSession {
         with url: URL,
         completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void
     ) -> URLSessionDataTask {
+        wasAccessToNetwork = true
         mockTask.completionHandler = completionHandler
         return mockTask
     }
@@ -109,7 +181,7 @@ private class MockTask: URLSessionDataTask {
         return _error
     }
     var completionHandler:(
-        (Data?, URLResponse?, Error?) -> Void)!
+        (Data?, URLResponse?, Error?) -> Void)?
     init(
         data: Data?, response: URLResponse?, error: Error?
     ) {
@@ -119,7 +191,10 @@ private class MockTask: URLSessionDataTask {
     }
     override func resume() {
         DispatchQueue.main.async {
-            self.completionHandler(self.data, self.urlResponse, self.error)
+            guard let completionHandler = self.completionHandler else {
+                return
+            }
+            completionHandler(self.data, self.urlResponse, self.error)
         }
     }
 }

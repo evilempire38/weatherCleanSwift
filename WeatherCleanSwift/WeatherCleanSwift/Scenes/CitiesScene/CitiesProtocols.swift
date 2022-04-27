@@ -18,10 +18,6 @@ protocol CitiesBusinessLogic {
 }
 
 protocol CitiesWorkerLogic {
-    func getBaseWeatherFromUserDefaults(
-    _ request: Cities.InitForm.Request,
-    completion: @escaping ([Cities.WeatherModel]) -> Void
-    )
     func getBaseWeather(
         _ request: Cities.InitForm.Request,
         completion: @escaping (Result<[Cities.WeatherModel], NetworkError>) -> Void

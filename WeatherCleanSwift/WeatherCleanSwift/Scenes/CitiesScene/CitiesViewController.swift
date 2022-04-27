@@ -184,6 +184,7 @@ let object =
     }
         return cell
     }
+}
 extension CitiesViewController: UISearchBarDelegate {
         func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
@@ -198,6 +199,7 @@ extension CitiesViewController: UISearchBarDelegate {
         }
         collection.reloadData()
     }
+}
 extension CitiesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
