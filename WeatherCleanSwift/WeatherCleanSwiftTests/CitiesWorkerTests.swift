@@ -22,11 +22,11 @@ final class CitiesWorkerTests: XCTestCase {
             case .success(let success):
                 XCTAssert(
                     storageMock.savedMockObject?.name == success.first?.name,
-                    "город запрошенный и сохраненный совпадают"
+                    "Должен сохраниться правильный объект"
                 )
                 expectaionToSave.fulfill()
             case .failure(_):
-                XCTFail("что-то пошло не так")
+                XCTFail("Должен придти success")
             }
         }
         wait(for: [expectaionToSave], timeout: 1)
@@ -43,7 +43,7 @@ final class CitiesWorkerTests: XCTestCase {
             case .success(_):
                 XCTFail("Получен success вместо error")
             case .failure(let error):
-                XCTAssert(error == .failureDecoding)
+                XCTAssert(error == .failureDecoding, "Должна вернуться ошибка с .failureDecoding")
             }
             expeсtationFailureDecoding.fulfill()
         }
@@ -78,14 +78,14 @@ final class CitiesWorkerTests: XCTestCase {
             case .success(let success):
                 XCTAssert(
                     mockStorage.loadedMockObject?.first?.cod == success.first?.cod,
-                    "Ждем совпадение данных и флаг true"
+                    "Данные должны вернуться из storage"
                 )
+                XCTAssertFalse(sessionMock.wasAccessToNetwork, "Мы не должны ходить в сеть")
+                XCTAssertTrue(mockStorage.isObjectLoaded, "Должен вернуться флаг true")
             case .failure(_):
                 XCTFail("Пришла ошибка")
             }
         }
-        XCTAssertFalse(sessionMock.wasAccessToNetwork, "мы не идем в сеть. Должен вернуться false")
-        XCTAssertTrue(mockStorage.isObjectLoaded, "Должен вернуться флаг true")
     }
     func testsIsCityAdded() {
         let jsonSuccess = JsonMock()
